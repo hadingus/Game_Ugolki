@@ -1,4 +1,5 @@
 import copy
+from abc import ABC, abstractmethod
 
 
 class Unit:
@@ -24,17 +25,66 @@ class Unit:
     def __hash__(self):
         return hash(id)
 
+    def move(self, board, position):
+        self.mover.move(self, board, position)
+
 
 class Cell:
     def __init__(self, state):
         self.state = state
 
 
-class Mover:
+class Mover(ABC):
+    @abstractmethod
     def move(self, unit, board, position):
-        print('I am standard mover')
+        pass
+
+
+class PawnMover(Mover):
+    def move(self, unit, board, position):
+        print("Pawn moves")
+
+
+class KingMover(Mover):
+    def move(self, unit, board, position):
+        print("King moves")
+
+
+class UsualMover(Mover):
+    def move(self, unit, board, position):
+        print("Usual figure moves")
 
 
 class FlexMover(Mover):
     def move(self, unit, board, position):
-        print('Hehehehe')
+        print("Flex figure moves")
+
+
+class SnakeMover(Mover):
+    def move(self, unit, board, position):
+        print("Snake moves")
+
+
+class Bishop(Mover):
+    def move(self, unit, board, position):
+        print("Bishop moves")
+
+
+class RookMover(Mover):
+    def move(self, unit, board, position):
+        print("Rook moves")
+
+
+class SwapMover(Mover):
+    def move(self, unit, board, position):
+        print("Vengeful spirit moves")
+
+
+class PoliceManMover(Mover):
+    def move(self, unit, board, position):
+        print("Police man moves")
+
+
+class CheckersKingMover(Mover):
+    def move(self, unit, board, position):
+        print("Checker King moves")

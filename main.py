@@ -1,18 +1,30 @@
 from copy import deepcopy
 from game_lib import *
 
-a = Unit('usual', Mover())
-b = Unit('flex', FlexMover())
+someMovers = [PawnMover(), KingMover(), FlexMover(), SwapMover()]
 
-c = deepcopy(b)
+units = []
 
-mp = {a: 1, b: 2, c: 3}
+for i in range(8):
+    units.append(Unit(str(i), someMovers[i % 4]))
 
-mp[a] = 4
+for unit in units:
+    unit.move(None, None)
 
-a.mover.move(0, 0, 0)
-b.mover.move(0, 0, 0)
-c.mover.move(0, 0, 0)
+# Hash test
 
+unitSet = set(units)
+print("Len of set", len(units))
 
-print(mp[a])
+# Copying
+
+for i in range(8):
+    units.append(deepcopy(units[i]))
+
+unitSet = set(units)
+print("Len of double set", len(units))
+
+for i in range(8):
+    assert units[i].type == units[i + 8].type
+
+print("All is correct")
