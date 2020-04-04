@@ -7,30 +7,25 @@ class Unit:
 
     def __init__(self, mover):
         self.id = Unit.__next_id
-        self.mover = mover
+        self._mover = mover
 
     def __copy__(self):
-        new_unit = self.__class__(self.mover)
+        new_unit = self.__class__(self._mover)
         new_unit.__dict__.update(self.__dict__)
-        new_unit.mover = copy.copy(self.mover)
+        new_unit._mover = copy.copy(self._mover)
         return new_unit
 
     def __deepcopy__(self, memo={}):
-        new_unit = self.__class__(self.mover)
+        new_unit = self.__class__(self._mover)
         new_unit.__dict__.update(self.__dict__)
-        new_unit.mover = copy.deepcopy(self.mover, memo)
+        new_unit._mover = copy.deepcopy(self._mover, memo)
         return new_unit
 
     def __hash__(self):
         return hash(id)
 
     def move(self, board, position):
-        self.mover.move(self, board, position)
-
-
-class Cell:
-    def __init__(self, state):
-        self.state = state
+        self._mover.move(self, board, position)
 
 
 class Mover(ABC):
@@ -64,7 +59,7 @@ class SnakeMover(Mover):
         print("Snake moves")
 
 
-class Bishop(Mover):
+class BishopMover(Mover):
     def move(self, unit, board, position):
         print("Bishop moves")
 

@@ -1,5 +1,5 @@
 from copy import deepcopy
-from game_lib import *
+from unit import *
 from gamemode import *
 
 someMovers = [PawnMover(), KingMover(), FlexMover(), SwapMover()]

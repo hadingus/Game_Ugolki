@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-import game_lib
+import unit
 
 
 class GameMode:
@@ -50,7 +50,7 @@ class ClassicModeBuilder(SquareBuilder):
     def set_arrangement(self):
         _unit_list = []
         for i in range(9):
-            _unit_list.append(game_lib.Unit(game_lib.UsualMover()))
+            _unit_list.append(unit.Unit(unit.UsualMover()))
         self.put_units(3, 3, _unit_list)
 
 
@@ -62,7 +62,7 @@ class AdvancedModeBuilder(SquareBuilder):
     def set_arrangement(self):
         _unit_list = []
         for i in range(12):
-            _unit_list.append(game_lib.Unit(game_lib.UsualMover()))
+            _unit_list.append(unit.Unit(unit.UsualMover()))
         self.put_units(3, 4, _unit_list)
 
 
@@ -75,7 +75,7 @@ class TriangleModeBuilder(GameModeBuilder):
         for i in range(4):
             for j in range(4 - i):
                 self._result.arrangement.append(
-                        (game_lib.Unit(game_lib.FlexMover()), i, j))
+                        (unit.Unit(unit.FlexMover()), i, j))
 
 
 class AllUnitsModeBuilder(GameModeBuilder):
@@ -84,16 +84,16 @@ class AllUnitsModeBuilder(GameModeBuilder):
         self._result.size_map = 9
 
     def set_arrangement(self):
-        self._result.arrangement.append((game_lib.Unit(game_lib.CheckersKingMover()), 0, 0))
-        self._result.arrangement.append((game_lib.Unit(game_lib.PoliceManMover()), 0, 1))
-        self._result.arrangement.append((game_lib.Unit(game_lib.SwapMover()), 1, 0))
-        self._result.arrangement.append((game_lib.Unit(game_lib.SnakeMover()), 1, 1))
-        self._result.arrangement.append((game_lib.Unit(game_lib.RookMover()), 0, 2))
-        self._result.arrangement.append((game_lib.Unit(game_lib.Bishop()), 0, 3))
-        self._result.arrangement.append((game_lib.Unit(game_lib.FlexMover()), 1, 2))
-        self._result.arrangement.append((game_lib.Unit(game_lib.UsualMover()), 2, 1))
-        self._result.arrangement.append((game_lib.Unit(game_lib.KingMover()), 2, 0))
-        self._result.arrangement.append((game_lib.Unit(game_lib.PawnMover()), 3, 0))
+        self._result.arrangement.append((unit.Unit(unit.CheckersKingMover()), 0, 0))
+        self._result.arrangement.append((unit.Unit(unit.PoliceManMover()), 0, 1))
+        self._result.arrangement.append((unit.Unit(unit.SwapMover()), 1, 0))
+        self._result.arrangement.append((unit.Unit(unit.SnakeMover()), 1, 1))
+        self._result.arrangement.append((unit.Unit(unit.RookMover()), 0, 2))
+        self._result.arrangement.append((unit.Unit(unit.BishopMover()), 0, 3))
+        self._result.arrangement.append((unit.Unit(unit.FlexMover()), 1, 2))
+        self._result.arrangement.append((unit.Unit(unit.UsualMover()), 2, 1))
+        self._result.arrangement.append((unit.Unit(unit.KingMover()), 2, 0))
+        self._result.arrangement.append((unit.Unit(unit.PawnMover()), 3, 0))
 
 
 class KingPoliceModeBuilder(SquareBuilder):
@@ -104,10 +104,10 @@ class KingPoliceModeBuilder(SquareBuilder):
     def set_arrangement(self):
         _unit_list = []
         for i in range(4):
-            _unit_list.append(game_lib.Unit(game_lib.KingMover()))
-        _unit_list.append(game_lib.Unit(game_lib.PoliceManMover()))
+            _unit_list.append(unit.Unit(unit.KingMover()))
+        _unit_list.append(unit.Unit(unit.PoliceManMover()))
         for i in range(4):
-            _unit_list.append(game_lib.Unit(game_lib.KingMover()))
+            _unit_list.append(unit.Unit(unit.KingMover()))
         self.put_units(3, 3, _unit_list)
 
 
@@ -119,9 +119,9 @@ class WallModeBuilder(SquareBuilder):
     def set_arrangement(self):
         _unit_list = []
         for i in range(4):
-            _unit_list.append(game_lib.Unit(game_lib.Bishop()))
-            _unit_list.append(game_lib.Unit(game_lib.RookMover()))
-        _unit_list.append(game_lib.Unit(game_lib.Bishop()))
+            _unit_list.append(unit.Unit(unit.BishopMover()))
+            _unit_list.append(unit.Unit(unit.RookMover()))
+        _unit_list.append(unit.Unit(unit.BishopMover()))
         self.put_units(3, 3, _unit_list)
 
 
