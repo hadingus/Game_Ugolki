@@ -12,7 +12,6 @@ class GameMode:
 class GameModeBuilder(ABC):
 
     def __init__(self):
-        self._result = GameMode()
         self.reset()
 
     def reset(self):
