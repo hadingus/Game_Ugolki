@@ -60,7 +60,7 @@ class UsualUnitBuilder(SquareBuilder):
 class ClassicModeBuilder(UsualUnitBuilder):
 
     def __init__(self):
-        self.reset()
+        super(UsualUnitBuilder, self).__init__()
         self._n = 3
         self._m = 3
 
@@ -68,7 +68,7 @@ class ClassicModeBuilder(UsualUnitBuilder):
 class AdvancedModeBuilder(UsualUnitBuilder):
 
     def __init__(self):
-        self.reset()
+        super(UsualUnitBuilder, self).__init__()
         self._n = 3
         self._m = 4
 
