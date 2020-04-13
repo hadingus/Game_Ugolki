@@ -35,8 +35,11 @@ class Unit:
     def set_board(self, board):
         self._board = board
 
-    def set_mover(self, new_mover):
+    def set_mover(self, new_mover, *, keep_type=False):
+        # In some ways unit.type may alter from unit._mover.type
         self._mover = new_mover
+        if not keep_type:
+            self._type = self._mover.type
 
     @property
     def type(self):
