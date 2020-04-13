@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-import unit
+from unit import Unit, UsualMover, FlexMover, CheckersKingMover, PoliceManMover, SwapMover, SnakeMover
+from unit import RookMover, BishopMover, KingMover, PawnMover
 
 
 class GameMode:
@@ -11,9 +12,12 @@ class GameMode:
 
 class GameModeBuilder(ABC):
 
+    _base_map_size = 8
+
     def __init__(self):
-        self._result = GameMode()
         self.reset()
+        self._n = 0
+        self._m = 0
 
     def reset(self):
         self._result = GameMode()
@@ -42,40 +46,43 @@ class SquareBuilder(GameModeBuilder, ABC):
                 k += 1
 
 
-class ClassicModeBuilder(SquareBuilder):
-
+class UsualUnitBuilder(SquareBuilder):
     def set_size(self):
-        self._result.size_map = 8
+        self._result.size_map = SquareBuilder._base_map_size
 
     def set_arrangement(self):
         _unit_list = []
-        for i in range(9):
-            _unit_list.append(unit.Unit(unit.UsualMover()))
-        self.put_units(3, 3, _unit_list)
+        for i in range(self._n * self._m):
+            _unit_list.append(Unit(UsualMover()))
+        self.put_units(self._n, self._m, _unit_list)
 
 
-class AdvancedModeBuilder(SquareBuilder):
+class ClassicModeBuilder(UsualUnitBuilder):
 
-    def set_size(self):
-        self._result.size_map = 8
+    def __init__(self):
+        self.reset()
+        self._n = 3
+        self._m = 3
 
-    def set_arrangement(self):
-        _unit_list = []
-        for i in range(12):
-            _unit_list.append(unit.Unit(unit.UsualMover()))
-        self.put_units(3, 4, _unit_list)
+
+class AdvancedModeBuilder(UsualUnitBuilder):
+
+    def __init__(self):
+        self.reset()
+        self._n = 3
+        self._m = 4
 
 
 class TriangleModeBuilder(GameModeBuilder):
 
     def set_size(self):
-        self._result.size_map = 8
+        self._result.size_map = self._base_map_size
 
     def set_arrangement(self):
         for i in range(4):
             for j in range(4 - i):
                 self._result.arrangement.append(
-                        (unit.Unit(unit.FlexMover()), i, j))
+                        (Unit(FlexMover()), i, j))
 
 
 class AllUnitsModeBuilder(GameModeBuilder):
@@ -84,16 +91,16 @@ class AllUnitsModeBuilder(GameModeBuilder):
         self._result.size_map = 9
 
     def set_arrangement(self):
-        self._result.arrangement.append((unit.Unit(unit.CheckersKingMover()), 0, 0))
-        self._result.arrangement.append((unit.Unit(unit.PoliceManMover()), 0, 1))
-        self._result.arrangement.append((unit.Unit(unit.SwapMover()), 1, 0))
-        self._result.arrangement.append((unit.Unit(unit.SnakeMover()), 1, 1))
-        self._result.arrangement.append((unit.Unit(unit.RookMover()), 0, 2))
-        self._result.arrangement.append((unit.Unit(unit.BishopMover()), 0, 3))
-        self._result.arrangement.append((unit.Unit(unit.FlexMover()), 1, 2))
-        self._result.arrangement.append((unit.Unit(unit.UsualMover()), 2, 1))
-        self._result.arrangement.append((unit.Unit(unit.KingMover()), 2, 0))
-        self._result.arrangement.append((unit.Unit(unit.PawnMover()), 3, 0))
+        self._result.arrangement.append((Unit(CheckersKingMover()), 0, 0))
+        self._result.arrangement.append((Unit(PoliceManMover()), 0, 1))
+        self._result.arrangement.append((Unit(SwapMover()), 1, 0))
+        self._result.arrangement.append((Unit(SnakeMover()), 1, 1))
+        self._result.arrangement.append((Unit(RookMover()), 0, 2))
+        self._result.arrangement.append((Unit(BishopMover()), 0, 3))
+        self._result.arrangement.append((Unit(FlexMover()), 1, 2))
+        self._result.arrangement.append((Unit(UsualMover()), 2, 1))
+        self._result.arrangement.append((Unit(KingMover()), 2, 0))
+        self._result.arrangement.append((Unit(PawnMover()), 3, 0))
 
 
 class KingPoliceModeBuilder(SquareBuilder):
@@ -104,10 +111,10 @@ class KingPoliceModeBuilder(SquareBuilder):
     def set_arrangement(self):
         _unit_list = []
         for i in range(4):
-            _unit_list.append(unit.Unit(unit.KingMover()))
-        _unit_list.append(unit.Unit(unit.PoliceManMover()))
+            _unit_list.append(Unit(KingMover()))
+        _unit_list.append(Unit(PoliceManMover()))
         for i in range(4):
-            _unit_list.append(unit.Unit(unit.KingMover()))
+            _unit_list.append(Unit(KingMover()))
         self.put_units(3, 3, _unit_list)
 
 
@@ -119,9 +126,9 @@ class WallModeBuilder(SquareBuilder):
     def set_arrangement(self):
         _unit_list = []
         for i in range(4):
-            _unit_list.append(unit.Unit(unit.BishopMover()))
-            _unit_list.append(unit.Unit(unit.RookMover()))
-        _unit_list.append(unit.Unit(unit.BishopMover()))
+            _unit_list.append(Unit(BishopMover()))
+            _unit_list.append(Unit(RookMover()))
+        _unit_list.append(Unit(BishopMover()))
         self.put_units(3, 3, _unit_list)
 
 
