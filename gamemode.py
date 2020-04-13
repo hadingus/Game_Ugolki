@@ -16,8 +16,6 @@ class GameModeBuilder(ABC):
 
     def __init__(self):
         self.reset()
-        self._n = 0
-        self._m = 0
 
     def reset(self):
         self._result = GameMode()
@@ -52,25 +50,19 @@ class UsualUnitBuilder(SquareBuilder):
 
     def set_arrangement(self):
         _unit_list = []
-        for i in range(self._n * self._m):
+        for i in range(self._width * self._height):
             _unit_list.append(Unit(UsualMover()))
-        self.put_units(self._n, self._m, _unit_list)
+        self.put_units(self._width, self._height, _unit_list)
 
 
 class ClassicModeBuilder(UsualUnitBuilder):
-
-    def __init__(self):
-        self.reset()
-        self._n = 3
-        self._m = 3
+    _width = 3
+    _height = 3
 
 
 class AdvancedModeBuilder(UsualUnitBuilder):
-
-    def __init__(self):
-        self.reset()
-        self._n = 3
-        self._m = 4
+    _width = 3
+    _height = 4
 
 
 class TriangleModeBuilder(GameModeBuilder):
