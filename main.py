@@ -1,7 +1,7 @@
 from copy import deepcopy
 from unit import *
 from gamemode import *
-
+from board import Board
 
 def main():
     someMovers = [PawnMover(), KingMover(), FlexMover(), SwapMover()]
@@ -43,6 +43,16 @@ def main():
         print(m.size_map)
 
     print("GameMode is correct")
+
+    board = Board(dir.construct_game_mode(b[0]))
+    board.print_board()
+
+    print("First board is correct")
+
+    board.reformat(dir.construct_game_mode(b[3]))
+    board.print_board()
+
+    print("Second board is correct")
 
 
 if __name__ == '__main__':
