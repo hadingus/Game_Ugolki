@@ -1,12 +1,14 @@
 import copy
 from enum import Enum
 from abc import ABC, abstractmethod
+from player import Player
 
 
 class Unit:
     __next_id = 0
 
-    def __init__(self, mover: 'Mover'):
+    def __init__(self, mover: 'Mover', player: Player = Player()):
+        self.player = player
         self.id = Unit.__next_id
         self._mover = mover
         self._type = mover.type
@@ -16,13 +18,18 @@ class Unit:
         new_unit = self.__class__(self._mover)
         new_unit.__dict__.update(self.__dict__)
         new_unit._mover = copy.copy(self._mover)
+        new_unit.player = self.player
         return new_unit
 
     def __deepcopy__(self, memo={}):
         new_unit = self.__class__(self._mover)
         new_unit.__dict__.update(self.__dict__)
         new_unit._mover = copy.deepcopy(self._mover, memo)
+        new_unit.player = self.player
         return new_unit
+
+    def set_player(self, player: Player):
+        self.player = player
 
     def __hash__(self):
         return hash(id)

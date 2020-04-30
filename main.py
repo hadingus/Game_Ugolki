@@ -7,6 +7,8 @@ from gui.mode_page import ModePage
 from gui.gui_operator import GuiOperator
 import pygame
 
+from board import Board
+
 
 def main():
     pygame.init()
@@ -25,6 +27,16 @@ def main():
             operator.state.handle(event)
             operator.state.draw()
             pygame.display.flip()
+
+    board = Board(dir.construct_game_mode(b[0]))
+    board.print_board()
+
+    print("First board is correct")
+
+    board.reformat(dir.construct_game_mode(b[3]))
+    board.print_board()
+
+    print("Second board is correct")
 
 
 if __name__ == '__main__':
