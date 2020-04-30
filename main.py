@@ -1,48 +1,30 @@
 from copy import deepcopy
 from unit import *
 from gamemode import *
+from gui.components import Button
+from gui.start_page import StartPage
+from gui.mode_page import ModePage
+from gui.gui_operator import GuiOperator
+import pygame
 
 
 def main():
-    someMovers = [PawnMover(), KingMover(), FlexMover(), SwapMover()]
+    pygame.init()
+    screen = pygame.display.set_mode([512, 512])
 
-    units = []
+    pygame.display.flip()
 
-    for i in range(8):
-        units.append(Unit(someMovers[i % 4]))
-
-    for unit in units:
-        unit.set_board("Silly board")
-
-    for unit in units:
-        print(unit.type)
-        unit.move(None)
-    # Hash test
-
-    unitSet = set(units)
-    print("Len of set", len(units))
-
-    # Copying
-
-    for i in range(8):
-        units.append(deepcopy(units[i]))
-
-    unitSet = set(units)
-    print("Len of double set", len(units))
-
-    print("All is correct")
-
-    # GameMode Test
-
-    dir = Director()
-    b = (ClassicModeBuilder(), AdvancedModeBuilder(), TriangleModeBuilder(),
-         AllUnitsModeBuilder(), KingPoliceModeBuilder(), WallModeBuilder())
-
-    modes = [dir.construct_game_mode(md) for md in b]
-    for m in modes:
-        print(m.size_map)
-
-    print("GameMode is correct")
+    operator = GuiOperator()
+    startPage = StartPage(screen, operator)
+    operator.state = startPage
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit(0)
+            operator.state.handle(event)
+            operator.state.draw()
+            pygame.display.flip()
 
 
 if __name__ == '__main__':
