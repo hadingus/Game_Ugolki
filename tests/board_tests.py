@@ -23,5 +23,3 @@ def test_classic():
     assert board.is_game_finished() is board.player_A
     assert board.do_move(7, 7, 0, 0) is True
     assert board.is_game_finished() is None
-
-test_classic()
