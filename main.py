@@ -39,6 +39,7 @@ def main():
     print("Second board is correct")
 
 
+
 if __name__ == '__main__':
     main()
 

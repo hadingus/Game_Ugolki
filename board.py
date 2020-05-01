@@ -72,7 +72,7 @@ class Board:
                 cnt_b -= 1
             x, y = sym_coord(x, y, self.size_map)
             if self.map[x][y] is not None and self.map[x][y].player == self.player_A:
-                cnt_b -= 1
+                cnt_a -= 1
         if cnt_b == 0 and cnt_a == 0:
             return [self.player_A, self.player_B]
         elif cnt_b == 0:
@@ -98,8 +98,7 @@ class Board:
         if self.map[to_x][to_y] is not None or self.map[from_x][from_y] is None:
             return None
 
-        result = self.map[from_x][from_y].copy()
-        self.map[to_x][to_y] = result
+        self.map[to_x][to_y] = self.map[from_x][from_y]
         self.map[from_x][from_y] = None
 
     def print_board(self):
