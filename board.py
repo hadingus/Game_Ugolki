@@ -92,14 +92,15 @@ class Board:
 
     def do_move(self, from_x, from_y, to_x, to_y):
         if from_x == to_x and from_y == to_y:
-            return None
+            return False
         if not valid(from_x, from_y, self.size_map) or not valid(to_x, to_y, self.size_map):
-            return None
+            return False
         if self.map[to_x][to_y] is not None or self.map[from_x][from_y] is None:
-            return None
+            return False
 
         self.map[to_x][to_y] = self.map[from_x][from_y]
         self.map[from_x][from_y] = None
+        return True
 
     def print_board(self):
         for x in range(self.size_map):
