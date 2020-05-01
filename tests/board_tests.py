@@ -1,5 +1,5 @@
 from board import Board
-from gamemode import ClassicModeBuilder, Director
+from gamemode import ClassicModeBuilder, Director, AllUnitsModeBuilder
 from itertools import product
 
 
@@ -23,3 +23,23 @@ def test_classic():
     assert board.is_game_finished() is board.player_A
     assert board.do_move(7, 7, 0, 0) is True
     assert board.is_game_finished() is None
+
+
+def test_triangle():
+    director = Director()
+    mode = director.construct_game_mode(AllUnitsModeBuilder())
+    board = Board(mode)
+    for i in range(4):
+        for j in range(3 - i):
+            ni, nj = 8 - i, 8 - j
+            assert board.map[i][j].type == board.map[ni][nj].type
+
+    for i in range(4):
+        for j in range(4 - i):
+            ni, nj = 8 - i, 8 - j
+            board.map[i][j], board.map[ni][nj] = board.map[ni][nj], board.map[i][j]
+
+    board.map[0][0], board.map[4][4] = board.map[4][4], board.map[0][0]
+    board.map[8][8], board.map[7][7] = board.map[7][7], board.map[8][8]
+
+    assert board.is_game_finished() == board.player_A

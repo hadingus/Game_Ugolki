@@ -5,6 +5,7 @@ from gui.components import Button
 from gui.start_page import StartPage
 from gui.mode_page import ModePage
 from gui.gui_operator import GuiOperator
+from gui.board_page import Board_page
 import pygame
 
 from board import Board
@@ -12,13 +13,17 @@ from board import Board
 
 def main():
     pygame.init()
-    screen = pygame.display.set_mode([512, 512])
+    screen = pygame.display.set_mode([800, 700])
 
     pygame.display.flip()
 
+    director = Director()
+    mode = director.construct_game_mode(ClassicModeBuilder())
+    board = Board(mode)
+
     operator = GuiOperator()
     startPage = StartPage(screen, operator)
-    operator.state = startPage
+    operator.state = Board_page(screen, operator, board)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -27,6 +32,7 @@ def main():
             operator.state.handle(event)
             operator.state.draw()
             pygame.display.flip()
+
 
     board = Board(dir.construct_game_mode(b[0]))
     board.print_board()

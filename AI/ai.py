@@ -4,8 +4,6 @@ from .boardstate import BoardState
 
 from itertools import product
 
-from src.utils import timeLimit
-
 import numpy as np
 
 
