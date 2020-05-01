@@ -1,6 +1,11 @@
 from abc import ABC, abstractmethod
 from unit import Unit, UsualMover, FlexMover, CheckersKingMover, PoliceManMover, SwapMover, SnakeMover
 from unit import RookMover, BishopMover, KingMover, PawnMover
+from enum import Enum
+
+
+class ModeFeature(Enum):
+    AI = 1
 
 
 class GameMode:
@@ -8,6 +13,7 @@ class GameMode:
     def __init__(self):
         self.size_map = 0
         self.arrangement = []
+        self.features = set()
 
 
 class GameModeBuilder(ABC):
@@ -44,7 +50,21 @@ class SquareBuilder(GameModeBuilder, ABC):
                 k += 1
 
 
-class UsualUnitBuilder(SquareBuilder):
+class FlexSquareBuilder(SquareBuilder):
+    _width = 3
+    _height = 3
+
+    def set_size(self):
+        self._result.size_map = SquareBuilder._base_map_size
+
+    def set_arrangement(self):
+        _unit_list = []
+        for i in range(self._width * self._height):
+            _unit_list.append(Unit(FlexMover()))
+        self.put_units(self._width, self._height, _unit_list)
+
+
+class UsualUnitBuilder(SquareBuilder, ABC):
     def set_size(self):
         self._result.size_map = SquareBuilder._base_map_size
 
@@ -130,3 +150,13 @@ class Director:
         builder.set_size()
         builder.set_arrangement()
         return builder.get_result()
+
+
+class AiDecorator(GameMode):
+    def __init__(self, gamemode: GameMode, ai):
+        self.wrappee = gamemode
+        self.size_map = gamemode.size_map
+        self.arrangement = gamemode.arrangement
+        self.features = gamemode.features
+        self.features.add(ModeFeature.AI)
+        self.ai = ai
