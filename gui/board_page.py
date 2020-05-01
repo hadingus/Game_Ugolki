@@ -23,7 +23,7 @@ class Board_page:
 
     def draw_board(self):
         board_len = 576
-        elem_size = board_len / self.board.size_map
+        elem_size = board_len // self.board.size_map
         pos_x = 10
         pos_y = 10
         position = pos_x, pos_y, elem_size * self.board.size_map + 20, elem_size * self.board.size_map + 20
