@@ -27,7 +27,7 @@ class ModePage(Handler, Drawable):
 
         buttons = [CheckButton(screen, (100, 100 + 40 * i, 200, 30), modes[i].name) for i in range(len(modes))]
 
-        self.mod_pairs = zip(buttons, (director.construct_game_mode(builder) for builder in builders))
+        self.mod_pairs = list(zip(buttons, modes))
 
         self.back_button = Button(screen, (400, 400, 100, 30), 'Назад')
         self.go_button = Button(screen, (100, 350, 100, 30), 'Играть!', colors.RED, colors.WHITE)
@@ -53,10 +53,10 @@ class ModePage(Handler, Drawable):
                     button.touch()
                     if self.checked_button != button and self.checked_button is not None:
                         self.checked_button.off()
-                        self.checked_button = button
-                        self.chosen_mode = mode
+                    self.checked_button = button
+                    self.chosen_mode = mode
             if self.back_button.accepts(position):
                 self.operator.state = start_page.StartPage(self.screen, self.operator)
             if self.go_button.accepts(position):
                 if self.chosen_mode is not None:
-                    self.operator.state = board_page.Board_page(self.screen, self.operator, )
+                    self.operator.state = board_page.BoardPage(self.screen, self.operator, self.chosen_mode)

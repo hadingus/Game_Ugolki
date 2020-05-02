@@ -5,7 +5,7 @@ from gui.components import Button
 from gui.start_page import StartPage
 from gui.mode_page import ModePage
 from gui.gui_operator import GuiOperator
-from gui.board_page import Board_page
+from gui.board_page import BoardPage
 import pygame
 
 from board import Board
@@ -23,7 +23,8 @@ def main():
 
     operator = GuiOperator()
     startPage = StartPage(screen, operator)
-    operator.state = Board_page(screen, operator, board)
+    # operator.state = BoardPage(screen, operator, mode)
+    operator.state = startPage
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
