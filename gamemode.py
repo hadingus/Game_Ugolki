@@ -14,11 +14,13 @@ class GameMode:
         self.size_map = 0
         self.arrangement = []
         self.features = set()
+        self.name = ""
 
 
 class GameModeBuilder(ABC):
 
     _base_map_size = 8
+    _mod_name = "Имя по умолчанию"
 
     def __init__(self):
         self.reset()
@@ -31,6 +33,9 @@ class GameModeBuilder(ABC):
         self.reset()
         return result
 
+    def set_name(self):
+        self._result.name = self._mod_name
+
     @abstractmethod
     def set_size(self):
         pass
@@ -38,6 +43,7 @@ class GameModeBuilder(ABC):
     @abstractmethod
     def set_arrangement(self):
         pass
+
 
 
 class SquareBuilder(GameModeBuilder, ABC):
@@ -53,6 +59,7 @@ class SquareBuilder(GameModeBuilder, ABC):
 class FlexSquareBuilder(SquareBuilder):
     _width = 3
     _height = 3
+    _mod_name = "Диагональные уголки 3x3"
 
     def set_size(self):
         self._result.size_map = SquareBuilder._base_map_size
@@ -78,11 +85,13 @@ class UsualUnitBuilder(SquareBuilder, ABC):
 class ClassicModeBuilder(UsualUnitBuilder):
     _width = 3
     _height = 3
+    _mod_name = "Классические уголки 3x3"
 
 
 class AdvancedModeBuilder(UsualUnitBuilder):
     _width = 3
     _height = 4
+    _mod_name = "Классические уголки 3x4"
 
 
 class TriangleModeBuilder(GameModeBuilder):
@@ -98,6 +107,7 @@ class TriangleModeBuilder(GameModeBuilder):
 
 
 class AllUnitsModeBuilder(GameModeBuilder):
+    _mod_name = "Мешанина"
 
     def set_size(self):
         self._result.size_map = 9
@@ -116,6 +126,7 @@ class AllUnitsModeBuilder(GameModeBuilder):
 
 
 class KingPoliceModeBuilder(SquareBuilder):
+    _mod_name = "Короли и полицейские"
 
     def set_size(self):
         self._result.size_map = 15
@@ -131,6 +142,7 @@ class KingPoliceModeBuilder(SquareBuilder):
 
 
 class WallModeBuilder(SquareBuilder):
+    _mod_name = "Стенка на стенку"
 
     def set_size(self):
         self._result.size_map = 15
@@ -145,10 +157,11 @@ class WallModeBuilder(SquareBuilder):
 
 
 class Director:
-    def construct_game_mode(self, builder):
+    def construct_game_mode(self, builder: GameModeBuilder):
         builder.reset()
         builder.set_size()
         builder.set_arrangement()
+        builder.set_name()
         return builder.get_result()
 
 
