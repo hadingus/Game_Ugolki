@@ -34,7 +34,6 @@ def main():
             operator.state.draw()
             pygame.display.flip()
 
-
     board = Board(dir.construct_game_mode(b[0]))
     board.print_board()
 
