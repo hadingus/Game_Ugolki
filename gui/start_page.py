@@ -12,11 +12,19 @@ class StartPage(Handler, Drawable):
         self.operator = operator
         self.playButton = Button(screen, (260, 100, 200, 80), "PLAY", colors.LIGHT_GREEN, colors.RED)
         self.title = Text(screen, (220, 20), "SUPER GAME", 50, colors.BLUE)
+        self.surok_img = pygame.image.load("sprites/surok.jpg").convert()
+        self.surok_img = pygame.transform.scale(self.surok_img, (300, 300))
+        self.zhekek_img = pygame.image.load("sprites/zhekek.jpg").convert()
+        self.zhekek_img = pygame.transform.scale(self.zhekek_img, (300, 300))
 
     def draw(self):
         self.screen.fill(colors.LIGHT_GREEN)
         self.playButton.draw()
         self.title.draw()
+        surok_rect = self.surok_img.get_rect(center=(200, 500))
+        zhekek_rect = self.zhekek_img.get_rect(center=(600, 500))
+        self.screen.blit(self.zhekek_img, zhekek_rect)
+        self.screen.blit(self.surok_img, surok_rect)
 
     def handle(self, event: pygame.event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
