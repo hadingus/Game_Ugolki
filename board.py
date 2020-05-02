@@ -25,6 +25,12 @@ class Board:
         self.size_map = 0
         self.reformat(mode)
 
+    def __getitem__(self, pos):
+        return self.map[pos[0]][pos[1]]
+
+    def __setitem__(self, pos, value):
+        self.map[pos[0]][pos[1]] = value
+
     def reformat(self, mode: GameMode):
         self.current_mode = mode
         self.arrange_template = []
