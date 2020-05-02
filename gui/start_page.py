@@ -11,9 +11,9 @@ class StartPage(Handler, Drawable):
         self.screen = screen
         self.operator = operator
         self.playButton = Button(screen, (180, 70, 500, 250), "PLAY", colors.LIGHT_GREEN, colors.RED)
-        self.autors = Text(screen, (340, 300), "Autors:", 40)
-        self.autor_surok = Text(screen, (120, 650), "surokpro", 20)
-        self.autor_hadingus = Text(screen, (570, 650), "hadingus", 20)
+        self.authors = Text(screen, (340, 300), "Authors:", 40, colors.BEIGE)
+        self.author_surok = Text(screen, (160, 650), "surokpro", 20, colors.BEIGE)
+        self.author_hadingus = Text(screen, (570, 650), "hadingus", 20, colors.BEIGE)
         self.title = Text(screen, (220, 20), "SUPER GAME", 50, colors.BLUE)
         self.surok_img = pygame.image.load("sprites/surok.jpg").convert()
         self.surok_img = pygame.transform.scale(self.surok_img, (300, 300))
@@ -23,9 +23,9 @@ class StartPage(Handler, Drawable):
     def draw(self):
         self.screen.fill(colors.LIGHT_GREEN)
         self.playButton.draw()
-        self.autors.draw()
-        self.autor_surok.draw()
-        self.autor_hadingus.draw()
+        self.authors.draw()
+        self.author_surok.draw()
+        self.author_hadingus.draw()
         self.title.draw()
         surok_rect = self.surok_img.get_rect(center=(200, 500))
         zhekek_rect = self.zhekek_img.get_rect(center=(600, 500))
