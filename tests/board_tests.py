@@ -1,9 +1,6 @@
 from board import Board
 from gamemode import ClassicModeBuilder, Director, AllUnitsModeBuilder
 from itertools import product
-from gui.board_page import BoardPage
-from gui.gui_operator import GuiOperator
-import pygame
 
 
 def test_classic():
@@ -46,24 +43,3 @@ def test_triangle():
     board.map[8][8], board.map[7][7] = board.map[7][7], board.map[8][8]
 
     assert board.is_game_finished() == board.player_A
-
-
-def test_gui():
-    pygame.init()
-    screen = pygame.display.set_mode([800, 700])
-
-    pygame.display.flip()
-    director = Director()
-    mode = director.construct_game_mode(ClassicModeBuilder())
-    operator = GuiOperator()
-    operator.state = BoardPage(screen, operator, mode)
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit(0)
-            operator.state.handle(event)
-            operator.state.draw()
-            pygame.display.flip()
-
-test_gui()

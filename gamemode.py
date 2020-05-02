@@ -45,7 +45,6 @@ class GameModeBuilder(ABC):
         pass
 
 
-
 class SquareBuilder(GameModeBuilder, ABC):
 
     def put_units(self, n, m, _unit_list):
