@@ -25,12 +25,12 @@ class ModePage(Handler, Drawable):
 
         modes = [director.construct_game_mode(builder) for builder in builders]
 
-        buttons = [CheckButton(screen, (100, 100 + 40 * i, 200, 30), modes[i].name) for i in range(len(modes))]
+        buttons = [CheckButton(screen, (100, 100 + 60 * i, 440, 45), modes[i].name) for i in range(len(modes))]
 
         self.mod_pairs = list(zip(buttons, modes))
 
-        self.back_button = Button(screen, (400, 400, 100, 30), 'Назад')
-        self.go_button = Button(screen, (100, 350, 100, 30), 'Играть!', colors.RED, colors.WHITE)
+        self.back_button = Button(screen, (440, 550, 100, 60), 'Назад')
+        self.go_button = Button(screen, (100, 550, 180, 60), 'Играть!', colors.RED, colors.WHITE)
 
         self.chosen_mode = None
         self.checked_button = None
