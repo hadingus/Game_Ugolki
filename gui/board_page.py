@@ -1,12 +1,12 @@
 import pygame
-from gui.components import Button, Text, CheckButton
-from gui.abstract import Handler, Drawable
+from gui.components import Button
 from gui import colors
 from gui.gui_operator import GuiOperator
 from gui import start_page
 from board import Board, valid
 from gamemode import GameMode
 from itertools import product
+from gui import mode_page
 
 
 def get_pos(pos, base_len):
@@ -24,6 +24,8 @@ class BoardPage:
         self.active_pos = None
         self.move_pos = None
         self.active_color = None
+        self.change_button = Button(screen, (15, 615, 300, 50), "Change regime", colors.KHAKI, colors.DARK_BLUE)
+        self.back_button = Button(screen, (420, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
 
     def upd_regime(self, mode: GameMode):
         self.board.reformat(mode)
@@ -31,6 +33,8 @@ class BoardPage:
     def draw(self):
         self.screen.fill(colors.SAND)
         self.draw_board()
+        self.back_button.draw()
+        self.change_button.draw()
 
     def handle(self, event: pygame.event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -46,14 +50,19 @@ class BoardPage:
                         self.active_color = colors.DARK_GREEN
                 else:
                     self.move_pos = [pos_x, pos_y]
+            else:
+                if self.change_button.accepts(event.pos):
+                    self.operator.state = mode_page.ModePage(self.screen, self.operator)
+                elif self.back_button.accepts(event.pos):
+                    self.operator.state = start_page.StartPage(self.screen, self.operator)
 
         if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
             if self.move_pos is not None and self.active_pos is not None:
                 from_x, from_y = self.active_pos
                 to_x, to_y = self.move_pos
-                self.board.do_move(from_x, from_y, to_x, to_y)
-                self.active_pos = None
-                self.move_pos = None
+                if self.board.do_move(from_x, from_y, to_x, to_y):
+                    self.active_pos = None
+                    self.move_pos = None
 
     def draw_board(self):
         self.elem_size = BoardPage.board_len // self.board.size_map
