@@ -53,8 +53,12 @@ class ModePage(Handler, Drawable):
                     button.touch()
                     if self.checked_button != button and self.checked_button is not None:
                         self.checked_button.off()
-                    self.checked_button = button
-                    self.chosen_mode = mode
+                    if self.checked_button == button:
+                        self.checked_button = None
+                        self.chosen_mode = None
+                    else:
+                        self.checked_button = button
+                        self.chosen_mode = mode
             if self.back_button.accepts(position):
                 self.operator.state = start_page.StartPage(self.screen, self.operator)
             if self.go_button.accepts(position):
