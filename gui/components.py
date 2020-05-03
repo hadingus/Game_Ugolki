@@ -15,7 +15,7 @@ class Text(Drawable):
         pygame.font.init()
 
     def draw(self):
-        self.screen.blit(self.font.render(self.text, False, self.color), self.position)
+        self.screen.blit(self.font.render(self.text, True, self.color), self.position)
 
 
 class Button(Drawable):
