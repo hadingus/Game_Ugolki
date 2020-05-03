@@ -48,7 +48,7 @@ class BoardPage:
                         self.active_color = colors.DARK_RED
                     else:
                         self.active_color = colors.DARK_GREEN
-                else:
+                elif self.active_pos is not None:
                     self.move_pos = [pos_x, pos_y]
             else:
                 if self.change_button.accepts(event.pos):
