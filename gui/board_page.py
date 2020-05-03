@@ -1,4 +1,5 @@
 import pygame
+import pygame.gfxdraw
 from gui.components import Button
 from gui import colors
 from gui.gui_operator import GuiOperator
@@ -87,5 +88,8 @@ class BoardPage:
                     figure_colour = colors.GREEN
                 if [x, y] == self.active_pos:
                     figure_colour = self.active_color
-                pygame.draw.circle(self.screen, figure_colour,
-                                   (position[0] + self.elem_size // 2, position[1] + self.elem_size // 2), cir_rad)
+
+                circle_x, circle_y = position[0] + self.elem_size // 2, position[1] + self.elem_size // 2
+                pygame.gfxdraw.aacircle(self.screen, circle_x, circle_y, cir_rad, figure_colour)
+                pygame.gfxdraw.filled_circle(self.screen, circle_x, circle_y, cir_rad, figure_colour)
+
