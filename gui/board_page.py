@@ -9,6 +9,7 @@ from board import Board, valid
 from gamemode import GameMode
 from itertools import product
 from gui import mode_page
+from gui.unit_drawer import DefaultDrawer
 
 
 def get_pos(pos, base_len):
@@ -25,7 +26,6 @@ class BoardPage(Handler, Drawable):
         self.elem_size = 0
         self.active_pos = None
         self.move_pos = None
-        self.active_color = None
         self.change_button = Button(screen, (15, 615, 300, 50), "Change regime", colors.KHAKI, colors.DARK_BLUE)
         self.back_button = Button(screen, (420, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
 
@@ -46,10 +46,6 @@ class BoardPage(Handler, Drawable):
             if valid(pos_x, pos_y, self.board.size_map):
                 if self.board[pos_x, pos_y] is not None:
                     self.active_pos = [pos_x, pos_y]
-                    if self.board[pos_x, pos_y].player == self.board.player_A:
-                        self.active_color = colors.DARK_RED
-                    else:
-                        self.active_color = colors.DARK_GREEN
                 elif self.active_pos is not None:
                     self.move_pos = [pos_x, pos_y]
             else:
@@ -81,16 +77,10 @@ class BoardPage(Handler, Drawable):
 
         for x, y in product(range(self.board.size_map), range(self.board.size_map)):
             if self.board[x, y] is not None:
-                cir_rad = self.elem_size // 2 - 5
                 position = pos_x + x * self.elem_size, pos_y + y * self.elem_size, self.elem_size, self.elem_size
-                if self.board[x, y].player == self.board.player_A:
-                    figure_colour = colors.RED
-                else:
-                    figure_colour = colors.GREEN
-                if [x, y] == self.active_pos:
-                    figure_colour = self.active_color
+                active = [x, y] == self.active_pos
+                self._draw_unit(self.board[x, y], position, active)
 
-                circle_x, circle_y = position[0] + self.elem_size // 2, position[1] + self.elem_size // 2
-                pygame.gfxdraw.aacircle(self.screen, circle_x, circle_y, cir_rad, figure_colour)
-                pygame.gfxdraw.filled_circle(self.screen, circle_x, circle_y, cir_rad, figure_colour)
-
+    def _draw_unit(self, unit, position, active):
+        type = unit.player == self.board.player_A
+        DefaultDrawer(self.screen).draw_unit(type, active, position, self.elem_size)
