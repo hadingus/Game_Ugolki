@@ -4,6 +4,31 @@ from gui.abstract import Handler, Drawable
 from gui import colors
 from gui.gui_operator import GuiOperator
 from gui import mode_page
+import webbrowser
+
+
+class Photo(Drawable, Handler):
+    width = 300
+
+    def __init__(self, screen: pygame.Surface, path_to_image: str, center, link: str):
+        self.screen = screen
+        self.path_to_image = path_to_image
+        self.center = center
+        self.img = pygame.image.load(self.path_to_image).convert()
+        self.img = pygame.transform.scale(self.img, (self.width, self.width))
+        self.link = link
+
+    def draw(self):
+        rect = self.img.get_rect(center=self.center)
+        self.screen.blit(self.img, rect)
+
+    def handle(self, event: pygame.event):
+        position = event.pos
+        lx, rx = self.center[0] - self.width // 2, self.center[0] + self.width // 2
+        ly, ry = self.center[1] - self.width // 2, self.center[1] + self.width // 2
+        x, y = position
+        if lx <= x <= rx and ly <= y <= ry:
+            webbrowser.open(self.link)
 
 
 class StartPage(Handler, Drawable):
@@ -15,10 +40,8 @@ class StartPage(Handler, Drawable):
         self.author_surok = Text(screen, (160, 650), "surokpro", 20, colors.BEIGE)
         self.author_hadingus = Text(screen, (570, 650), "hadingus", 20, colors.BEIGE)
         self.title = Text(screen, (220, 20), "SUPER GAME", 50, colors.BLUE)
-        self.surok_img = pygame.image.load("sprites/surok.jpg").convert()
-        self.surok_img = pygame.transform.scale(self.surok_img, (300, 300))
-        self.zhekek_img = pygame.image.load("sprites/zhekek.jpg").convert()
-        self.zhekek_img = pygame.transform.scale(self.zhekek_img, (300, 300))
+        self.surok = Photo(self.screen, "sprites/surok.jpg", (200, 500), "https://github.com/surkovv/")
+        self.zhekek = Photo(self.screen, "sprites/zhekek.jpg", (600, 500), "https://github.com/hadingus/")
 
     def draw(self):
         self.screen.fill(colors.LIGHT_GREEN)
@@ -27,13 +50,14 @@ class StartPage(Handler, Drawable):
         self.author_surok.draw()
         self.author_hadingus.draw()
         self.title.draw()
-        surok_rect = self.surok_img.get_rect(center=(200, 500))
-        zhekek_rect = self.zhekek_img.get_rect(center=(600, 500))
-        self.screen.blit(self.zhekek_img, zhekek_rect)
-        self.screen.blit(self.surok_img, surok_rect)
+        self.surok.draw()
+        self.zhekek.draw()
 
     def handle(self, event: pygame.event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             position = event.pos
             if self.playButton.accepts(position):
                 self.operator.state = mode_page.ModePage(self.screen, self.operator)
+
+            self.surok.handle(event)
+            self.zhekek.handle(event)
