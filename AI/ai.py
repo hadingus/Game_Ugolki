@@ -24,7 +24,7 @@ class PositionEvaluation:
         enemy_board = my_board.inverted()
 
         if board.is_game_finished:
-            winner = board.get_winner
+            winner = board.winner
             if winner == board.current_player:
                 return 10000
             elif winner == -board.current_player:
@@ -70,7 +70,7 @@ class AI:
         if depth == 0:
             return self.position_evaluation(state), state
 
-        moves = state.get_possible_moves
+        moves = state.possible_moves
         moves.sort(key=self.position_evaluation)
         answer = None
 

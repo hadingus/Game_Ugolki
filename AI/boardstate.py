@@ -3,10 +3,6 @@ from typing import Optional, List
 from itertools import product
 
 
-def _get_empty_board(y, x):
-    return np.zeros((y, x), dtype=np.int8)
-
-
 class BoardState:
     width = 8
     height = 8
@@ -14,6 +10,10 @@ class BoardState:
     def __init__(self, board: np.ndarray, current_player: int = 1):
         self.board: np.ndarray = board
         self.current_player: int = current_player
+
+    @staticmethod
+    def _get_empty_board(y, x):
+        return np.zeros((y, x), dtype=np.int8)
 
     def __eq__(self, other):
         if other is None:
@@ -52,13 +52,13 @@ class BoardState:
         result.board[to_y, to_x] = result.board[from_y, from_x]
         result.board[from_y, from_x] = 0
         result.next_player()
-        if result not in self.get_possible_moves:
+        if result not in self.possible_moves:
             return None
 
         return result
 
     @property
-    def get_possible_moves(self) -> List['BoardState']:
+    def possible_moves(self) -> List['BoardState']:
         result = []
         for x, y in product(range(self.width), range(self.height)):
             if self.board[y, x] == self.current_player:
@@ -77,7 +77,7 @@ class BoardState:
 
     def _dfs_brute_force(self, y, x, result, first_jump=True, used=None):
         if first_jump:
-            used = _get_empty_board(self.height, self.width)
+            used = self._get_empty_board(self.height, self.width)
             for ny, nx in product(range(max(0, y - 1), min(self.height, y + 2)),
                                   range(max(0, x - 1), min(self.width, x + 2))):
 
@@ -134,7 +134,7 @@ class BoardState:
             return -1
 
         if self.current_player == -1 and white_finished:
-            for state in self.get_possible_moves:
+            for state in self.possible_moves:
                 if state._is_corner_finished:
                     return 2
 
@@ -151,7 +151,7 @@ class BoardState:
         return True
 
     @property
-    def get_winner(self) -> Optional[int]:
+    def winner(self) -> Optional[int]:
         if not self.is_game_finished:
             raise Exception("Cannot determine winner. Game is on")
         return self._is_finished_and_winner
