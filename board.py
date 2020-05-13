@@ -9,9 +9,7 @@ def sym_coord(x, y, size):
 
 
 def valid(x, y, board):
-    if 0 <= x < board and 0 <= y < board:
-        return True
-    return False
+    return 0 <= x < board and 0 <= y < board
 
 
 class Board:

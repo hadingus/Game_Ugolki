@@ -3,6 +3,7 @@ import pygame.gfxdraw
 from gui.components import Button
 from gui import colors
 from gui.gui_operator import GuiOperator
+from gui.abstract import Handler, Drawable
 from gui import start_page
 from board import Board, valid
 from gamemode import GameMode
@@ -14,7 +15,7 @@ def get_pos(pos, base_len):
     return (pos - 20) // base_len
 
 
-class BoardPage:
+class BoardPage(Handler, Drawable):
     board_len = 576
 
     def __init__(self, screen: pygame.Surface, operator: GuiOperator, mode: GameMode):
