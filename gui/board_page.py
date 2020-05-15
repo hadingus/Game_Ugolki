@@ -65,6 +65,7 @@ class BoardPage(Handler, Drawable):
             if valid(pos_x, pos_y, self.board.size_map):
                 if self.board[pos_x, pos_y] is not None:
                     self.active_pos = [pos_x, pos_y]
+                    self.move_pos = None
                 elif self.active_pos is not None:
                     self.move_pos = [pos_x, pos_y]
             else:

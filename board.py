@@ -21,6 +21,7 @@ class Board:
         self.arrange_template = []
         self.map = []
         self.size_map = 0
+        self.position_of_unit = {}
         self.reformat(mode)
 
     def __getitem__(self, pos):
@@ -43,11 +44,16 @@ class Board:
             unit_x = units[1]
             unit_y = units[2]
             self.arrange_template.append((unit_x, unit_y))
+
             self.map[unit_x][unit_y] = deepcopy(unit)
             self.map[unit_x][unit_y].set_player(self.player_A)
+            self.map[unit_x][unit_y].set_board(self)
+            self.position_of_unit[self.map[unit_x][unit_y]] = (unit_x, unit_y)
             unit_x, unit_y = sym_coord(unit_x, unit_y, self.size_map)
             self.map[unit_x][unit_y] = deepcopy(unit)
             self.map[unit_x][unit_y].set_player(self.player_B)
+            self.map[unit_x][unit_y].set_board(self)
+            self.position_of_unit[self.map[unit_x][unit_y]] = (unit_x, unit_y)
 
     def __deepcopy__(self, memo={}):
         new_board = Board(self.current_mode)
@@ -101,10 +107,13 @@ class Board:
             return False
         if self.map[to_x][to_y] is not None or self.map[from_x][from_y] is None:
             return False
-
-        self.map[to_x][to_y] = self.map[from_x][from_y]
-        self.map[from_x][from_y] = None
-        return True
+        current_unit = self.map[from_x][from_y]
+        if current_unit.can_move((to_x, to_y)):
+            self.map[from_x][from_y] = None
+            self.map[to_x][to_y] = current_unit
+            self.position_of_unit[current_unit] = (to_x, to_y)
+            return True
+        return False
 
     def print_board(self):
         for x in range(self.size_map):
