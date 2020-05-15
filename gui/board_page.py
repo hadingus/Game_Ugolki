@@ -18,6 +18,9 @@ def get_pos(pos, base_len):
 
 class BoardPage(Handler, Drawable):
     board_len = 576
+    unit_color = dict(PAWN=colors.KHAKI, USUAL=colors.YELLOW, FLEX=colors.DARK_BLUE, POLICE=colors.BLACK,
+                      KING=colors.PURPLE, CHECKERS_KING=colors.PINK, SNAKE=colors.DRIED_MUSTARD,
+                      BISHOP=colors.AQUAMARINE, SWAP=colors.SANGRIA, ROOK=colors.SEMI_WHITE)
 
     def __init__(self, screen: pygame.Surface, operator: GuiOperator, mode: GameMode):
         self.screen = screen
@@ -79,8 +82,9 @@ class BoardPage(Handler, Drawable):
             if self.board[x, y] is not None:
                 position = pos_x + x * self.elem_size, pos_y + y * self.elem_size, self.elem_size, self.elem_size
                 active = [x, y] == self.active_pos
-                self._draw_unit(self.board[x, y], position, active)
+                color = BoardPage.unit_color[self.board[x, y].type.name]
+                self._draw_unit(self.board[x, y], position, active, color)
 
-    def _draw_unit(self, unit, position, active):
+    def _draw_unit(self, unit, position, active, color):
         type = unit.player == self.board.player_A
-        DefaultDrawer(self.screen).draw_unit(type, active, position, self.elem_size)
+        DefaultDrawer(self.screen).draw_unit(type, active, position, self.elem_size, color)
