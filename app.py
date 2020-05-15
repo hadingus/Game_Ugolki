@@ -6,7 +6,7 @@ from gui.start_page import StartPage
 class App:
     def start(self):
         pygame.init()
-        screen = pygame.display.set_mode([800, 700])
+        screen = pygame.display.set_mode([850, 700])
 
         pygame.display.flip()
 

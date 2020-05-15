@@ -17,4 +17,3 @@ class DefaultDrawer:
         pygame.gfxdraw.filled_circle(self.screen, center[0], center[1], size // 2 - 4, figure_colour)
         pygame.gfxdraw.aacircle(self.screen, center[0], center[1], size // 3 - 4, ins_colour)
         pygame.gfxdraw.filled_circle(self.screen, center[0], center[1], size // 3 - 4, ins_colour)
-

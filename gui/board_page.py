@@ -1,6 +1,6 @@
 import pygame
 import pygame.gfxdraw
-from gui.components import Button
+from gui.components import Button, Text
 from gui import colors
 from gui.gui_operator import GuiOperator
 from gui.abstract import Handler, Drawable
@@ -18,9 +18,13 @@ def get_pos(pos, base_len):
 
 class BoardPage(Handler, Drawable):
     board_len = 576
-    unit_color = dict(PAWN=colors.KHAKI, USUAL=colors.YELLOW, FLEX=colors.DARK_BLUE, POLICE=colors.BLACK,
+    unit_color = dict(PAWN=colors.SADDLEBROWN, USUAL=colors.YELLOW, FLEX=colors.DARK_BLUE, POLICE=colors.BLACK,
                       KING=colors.PURPLE, CHECKERS_KING=colors.PINK, SNAKE=colors.DRIED_MUSTARD,
                       BISHOP=colors.AQUAMARINE, SWAP=colors.SANGRIA, ROOK=colors.SEMI_WHITE)
+
+    unit_name = dict(PAWN='Пешка', USUAL='Обычная фигура', FLEX='Флекс-фигура', POLICE='Полицейский',
+                     KING='Король', CHECKERS_KING='Дамка', SNAKE='Змейка',
+                     BISHOP='Слон', SWAP='Vengeful Spirit', ROOK='Ладья')
 
     def __init__(self, screen: pygame.Surface, operator: GuiOperator, mode: GameMode):
         self.screen = screen
@@ -40,6 +44,18 @@ class BoardPage(Handler, Drawable):
         self.draw_board()
         self.back_button.draw()
         self.change_button.draw()
+        self.draw_color_exp()
+
+    def draw_color_exp(self):
+        pos_y = 10
+        for key in BoardPage.unit_color:
+            position = 620, pos_y, 220, 50
+            pygame.draw.rect(self.screen, colors.KHAKI, position)
+            position_col = 625, pos_y + 5, 40, 40
+            pygame.draw.rect(self.screen, BoardPage.unit_color[key], position_col)
+            pos_text = 670, pos_y + 10
+            Text(self.screen, pos_text, BoardPage.unit_name[key], 20).draw()
+            pos_y += 60
 
     def handle(self, event: pygame.event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
