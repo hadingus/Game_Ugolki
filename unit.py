@@ -84,8 +84,10 @@ class Mover(ABC):
                               range(y - police_block // 2, y + police_block // 2 + 1)):
             if (x, y) == (nx, ny):
                 continue
-            if board[nx, ny] is not None and board[nx, ny].type == Type.POLICE:
-                return False
+            if 0 <= nx < board.size_map and 0 <= ny < board.size_map:
+                if board[nx, ny] is not None and \
+                        board[nx, ny].type == Type.POLICE and board[nx, ny].player is not unit.player:
+                    return False
 
         return True
 
@@ -163,12 +165,18 @@ class BishopMover(Mover):
     def _positions_without_block(self, unit: Unit, board):
         result = set()
         x, y = board.position_of_unit[unit]
-        for delta in range(board.size_map):
-            result.add((x - delta, y - delta))
-            result.add((x + delta, y - delta))
-            result.add((x - delta, y + delta))
-            result.add((x + delta, y + delta))
-
+        going = [True] * 4
+        for delta in range(1, board.size_map + 1):
+            for num, pos in zip(range(4),
+                                ((x - delta, y - delta),
+                                 (x - delta, y + delta),
+                                 (x + delta, y - delta),
+                                 (x + delta, y + delta))):
+                if 0 <= pos[0] < board.size_map and 0 <= pos[1] < board.size_map:
+                    if board[pos] is not None:
+                        going[num] = False
+                    if going[num]:
+                        result.add(pos)
         return result
 
 
