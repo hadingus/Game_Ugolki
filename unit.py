@@ -179,15 +179,57 @@ class UsualMover(Mover):
 class FlexMover(Mover):
     type = Type.FLEX
 
+    def get_jumps(self, position, board):
+        x, y = position
+        delta = [(0, 1), (0, -1), (1, 0), (-1, 0), (-1, -1), (1, 1), (1, -1), (-1, 1)]
+        result = []
+        for dx, dy in delta:
+            nx, ny = x + dx, y + dy
+            mx, my = x + 2 * dx, y + 2 * dy
+            if not self._check_border((nx, ny), board.size_map):
+                continue
+            if not self._check_border((mx, my), board.size_map):
+                continue
+            if board[nx, ny] is not None and board[mx, my] is None:
+                result.append((mx, my))
+        return result
+
     def _positions_without_block(self, unit: Unit, board):
-        print("Flex figure moves")
+        result = []
+        result.extend(KingMover()._positions_without_block(unit, board))
+        result.extend(Jumper(self).get_positions_by_jump(unit, board))
+        return result
 
 
 class SnakeMover(Mover):
     type = Type.SNAKE
 
+    def get_jumps(self, position, board):
+        x, y = position
+        delta = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        result = []
+        for dx, dy in delta:
+            nx, ny = x + dx, y + dy
+            mx, my = x + 2 * dx, y + 2 * dy
+            nx %= board.size_map
+            ny %= board.size_map
+            mx %= board.size_map
+            my %= board.size_map
+            if board[nx, ny] is not None and board[mx, my] is None:
+                result.append((mx, my))
+        return result
+
     def _positions_without_block(self, unit: Unit, board):
-        print("Snake moves")
+        x, y = board.position_of_unit[unit]
+        result = []
+        for dx, dy in [(0, 1), (1, 0), (-1, 0), (0, -1)]:
+            nx, ny = x + dx, y + dy
+            nx %= board.size_map
+            ny %= board.size_map
+            if board[nx, ny] is None:
+                result.append((nx, ny))
+        result.extend(Jumper(self).get_positions_by_jump(unit, board))
+        return result
 
 
 class BishopMover(Mover):

@@ -77,12 +77,6 @@ class BoardPage(Handler, Drawable):
             elif self.back_button.accepts(event.pos):
                 self.operator.state = start_page.StartPage(self.screen, self.operator)
 
-            # if self.move_pos is not None and self.active_pos is not None:
-            #     from_x, from_y = self.active_pos
-            #     to_x, to_y = self.move_pos
-            #     if self.board.do_move(from_x, from_y, to_x, to_y):
-            #         self.active_pos = None
-            #         self.move_pos = None
 
     def draw_board(self):
         self.elem_size = BoardPage.board_len // self.board.size_map
