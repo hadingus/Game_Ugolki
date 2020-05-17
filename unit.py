@@ -70,6 +70,7 @@ class Mover(ABC):
             return False
         start_position = board.position_of_unit[unit]
         board.force_move(start_position, position)
+        return True
 
     def _can_move_to(self, unit, board, position):
         start_position = board.position_of_unit[unit]
@@ -85,8 +86,7 @@ class Mover(ABC):
 
     def _initial_checks(self, unit, board, position):
         size = board.size_map
-        start_position = board.position_of_unit[unit]
-        return start_position != position and self._check_border(position, size)
+        return self._check_border(position, size) and board[position] is None
 
     def _able_to_move(self, unit: Unit, board):
         police_block = 3
