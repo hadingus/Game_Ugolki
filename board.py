@@ -101,12 +101,6 @@ class Board:
         return None
 
     def do_move(self, from_x, from_y, to_x, to_y):
-        if from_x == to_x and from_y == to_y:
-            return False
-        if not valid(from_x, from_y, self.size_map) or not valid(to_x, to_y, self.size_map):
-            return False
-        if self.map[to_x][to_y] is not None or self.map[from_x][from_y] is None:
-            return False
         current_unit = self.map[from_x][from_y]
         return current_unit.move((to_x, to_y))
 
@@ -117,6 +111,11 @@ class Board:
         self.position_of_unit[current_unit] = (tx, ty)
         self.map[tx][ty] = current_unit
         self.map[fx][fy] = None
+
+    def force_swap(self, pos1, pos2):
+        x1, y1 = pos1
+        x2, y2 = pos2
+        self.map[x1][y1], self.map[x2][y2] = self.map[x2][y2], self.map[x1][y1]
 
     def print_board(self):
         for x in range(self.size_map):

@@ -64,6 +64,8 @@ class Mover(ABC):
     type = None
 
     def move(self, unit: Unit, board, position):
+        if not self._initial_checks(unit, board, position):
+            return False
         if not self._can_move_to(unit, board, position):
             return False
         start_position = board.position_of_unit[unit]
@@ -81,6 +83,11 @@ class Mover(ABC):
             return {}
         return self._positions_without_block(unit, board)
 
+    def _initial_checks(self, unit, board, position):
+        size = board.size_map
+        start_position = board.position_of_unit[unit]
+        return start_position != position and self._check_border(position, size)
+
     def _able_to_move(self, unit: Unit, board):
         police_block = 3
 
@@ -94,8 +101,10 @@ class Mover(ABC):
                 if board[nx, ny] is not None and \
                         board[nx, ny].type == Type.POLICE and board[nx, ny].player is not unit.player:
                     return False
-
         return True
+
+    def _check_border(self, position, size):
+        return 0 <= position[0] < size and 0 <= position[1] < size
 
     @abstractmethod
     def _positions_without_block(self, unit: Unit, board):
@@ -211,8 +220,23 @@ class RookMover(Mover):
 class SwapMover(Mover):
     type = Type.SWAP
 
+    def move(self, unit, board, position):
+        start_position = board.position_of_unit[unit]
+        if start_position == position or not self._check_border(position, board.size_map):
+            return False
+        if position in self._possible_positions(unit, board):
+            board.force_swap(start_position, position)
+            return True
+
+
     def _positions_without_block(self, unit: Unit, board):
-        print("Vengeful spirit moves")
+        result = []
+        position = board.position_of_unit[unit]
+        for x, y in product(range(board.size_map), range(board.size_map)):
+            if board[x, y] is not None and position != (x, y):
+                result.append((x, y))
+
+        return result
 
 
 class PoliceManMover(Mover):
