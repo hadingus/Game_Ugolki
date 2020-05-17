@@ -63,7 +63,7 @@ class BoardPage(Handler, Drawable):
             pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
 
             if self.active_pos is None:
-                if valid(pos_x, pos_y, self.board.size_map):
+                if valid(pos_x, pos_y, self.board.size_map) and self.board[pos_x, pos_y] is not None:
                     self.active_pos = (pos_x, pos_y)
             else:
                 if self.board.do_move(*self.active_pos, pos_x, pos_y) or self.active_pos == (pos_x, pos_y):
