@@ -134,7 +134,7 @@ def test_police():
     for dx in range(-1, 2):
         for dy in range(-1, 2):
             if dx != 0 or dy != 0 or dx != dy:
-                arrangement.append((Unit(PawnMover()), x + dx, y + dy))
+                arrangement.append((Unit(KingMover()), x + dx, y + dy))
     mode.set_arrangement(arrangement)
     board = Board(mode)
 
@@ -149,25 +149,30 @@ def test_police():
             p_y = y + dy
             for d2x in range(-1, 2):
                 for d2y in range(-1, 2):
-                    assert board.do_move(p_x, p_y, p_x + dx, p_y + dy) is True
+                    if board[p_x + dx, p_y + dy] is None:
+                        assert board.do_move(p_x, p_y, p_x + dx, p_y + dy) is True
+                        assert board.do_move(p_x + dx, p_y + dy, p_x, p_y) is True
 
     for i in range(15):
         for j in range(15):
-            if board[i, j] is not None and board[i, j].player == board.player_A and (i != 4 or j != 4):
+            if board[i, j] is not None and (i != 4 or j != 4):
                 board[i, j].player = board.player_B
 
     for dx in range(-1, 2):
         for dy in range(-1, 2):
+            if dx == 0 and dy == 0:
+                continue
             p_x = x + dx
             p_y = y + dy
             for d2x in range(-1, 2):
                 for d2y in range(-1, 2):
-                    assert board.do_move(p_x, p_y, p_x + dx, p_y + dy) is True
+                    assert board.do_move(p_x, p_y, p_x + dx, p_y + dy) is False
 
     x = 2
     y = 2
     mode.set_size(5)
-    mode.set_arrangement([(Unit(PoliceManMover(), 2, 2))])
+    mode.set_arrangement([(Unit(PoliceManMover()), 2, 2)])
+    board = Board(mode)
     for dx in range(-6, 6):
         for dy in range(-6, 6):
             if dx == dy and dx == 0:
@@ -180,5 +185,3 @@ def test_police():
                     assert board.do_move(to_x, to_y, x, y) is True
                 else:
                     assert board.do_move(x, y, to_x, to_y) is False
-
-
