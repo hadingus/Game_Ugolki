@@ -64,6 +64,7 @@ class Mover(ABC):
     type = None
 
     def move(self, unit: Unit, board, position):
+        print('FF')
         if not self._initial_checks(unit, board, position):
             return False
         if not self._can_move_to(unit, board, position):

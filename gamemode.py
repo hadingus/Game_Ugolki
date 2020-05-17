@@ -16,6 +16,12 @@ class GameMode:
         self.features = set()
         self.name = ""
 
+    def __init__(self, size, arrangement):
+        self.size_map = size
+        self.arrangement = arrangement
+        self.features = set()
+        self.name = ""
+
 
 class GameModeBuilder(ABC):
 
