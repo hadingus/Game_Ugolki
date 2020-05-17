@@ -3,6 +3,7 @@ from enum import Enum
 from abc import ABC, abstractmethod
 from player import Player
 from itertools import product
+import numpy as np
 
 
 class Unit:
@@ -153,11 +154,26 @@ class KingMover(Mover):
 class UsualMover(Mover):
     type = Type.USUAL
 
-    # def move(self, unit, board, position):
-    #     print("Usual figure moves")
+    def get_jumps(self, position, board):
+        x, y = position
+        delta = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        result = []
+        for dx, dy in delta:
+            nx, ny = x + dx, y + dy
+            mx, my = x + 2 * dx, y + 2 * dy
+            if not self._check_border((nx, ny), board.size_map):
+                continue
+            if not self._check_border((mx, my), board.size_map):
+                continue
+            if board[nx, ny] is not None and board[mx, my] is None:
+                result.append((mx, my))
+        return result
 
     def _positions_without_block(self, unit: Unit, board):
-        return RookMover()._positions_without_block(unit, board)
+        result = []
+        result.extend(PawnMover()._positions_without_block(unit, board))
+        result.extend(Jumper(self).get_positions_by_jump(unit, board))
+        return result
 
 
 class FlexMover(Mover):
@@ -250,4 +266,33 @@ class CheckersKingMover(Mover):
     type = Type.CHECKERS_KING
 
     def _positions_without_block(self, unit: Unit, board):
-        print("Checker King moves")
+        result = []
+        position = board.position_of_unit[unit]
+        for x, y in product(range(board.size_map), range(board.size_map)):
+            if board[x, y] is None and position != (x, y):
+                result.append((x, y))
+
+        return result
+
+
+class Jumper:
+    def __init__(self, mover):
+        self._mover = mover
+
+    def get_positions_by_jump(self, unit: Unit, board):
+        position = board.position_of_unit[unit]
+        size = board.size_map
+
+        used = np.zeros(shape=(size, size))
+        result = []
+
+        def dfs(pos):
+            if used[pos]:
+                return
+            used[pos] = True
+            result.append(pos)
+            for step in self._mover.get_jumps(pos, board):
+                dfs(step)
+
+        dfs(position)
+        return result
