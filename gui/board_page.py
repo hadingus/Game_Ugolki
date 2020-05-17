@@ -62,25 +62,27 @@ class BoardPage(Handler, Drawable):
             mouse_click_position = event.pos
             pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
 
-            if valid(pos_x, pos_y, self.board.size_map):
-                if self.board[pos_x, pos_y] is not None:
-                    self.active_pos = [pos_x, pos_y]
-                    self.move_pos = None
-                elif self.active_pos is not None:
-                    self.move_pos = [pos_x, pos_y]
+            if self.active_pos is None:
+                if valid(pos_x, pos_y, self.board.size_map):
+                    self.active_pos = (pos_x, pos_y)
             else:
-                if self.change_button.accepts(event.pos):
-                    self.operator.state = mode_page.ModePage(self.screen, self.operator)
-                elif self.back_button.accepts(event.pos):
-                    self.operator.state = start_page.StartPage(self.screen, self.operator)
-
-        if event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-            if self.move_pos is not None and self.active_pos is not None:
-                from_x, from_y = self.active_pos
-                to_x, to_y = self.move_pos
-                if self.board.do_move(from_x, from_y, to_x, to_y):
+                if self.board.do_move(*self.active_pos, pos_x, pos_y) or self.active_pos == (pos_x, pos_y):
                     self.active_pos = None
-                    self.move_pos = None
+                elif valid(pos_x, pos_y, self.board.size_map):
+                    if self.board[pos_x, pos_y] is not None:
+                        self.active_pos = (pos_x, pos_y)
+
+            if self.change_button.accepts(event.pos):
+                self.operator.state = mode_page.ModePage(self.screen, self.operator)
+            elif self.back_button.accepts(event.pos):
+                self.operator.state = start_page.StartPage(self.screen, self.operator)
+
+            # if self.move_pos is not None and self.active_pos is not None:
+            #     from_x, from_y = self.active_pos
+            #     to_x, to_y = self.move_pos
+            #     if self.board.do_move(from_x, from_y, to_x, to_y):
+            #         self.active_pos = None
+            #         self.move_pos = None
 
     def draw_board(self):
         self.elem_size = BoardPage.board_len // self.board.size_map
@@ -98,7 +100,7 @@ class BoardPage(Handler, Drawable):
         for x, y in product(range(self.board.size_map), range(self.board.size_map)):
             if self.board[x, y] is not None:
                 position = pos_x + x * self.elem_size, pos_y + y * self.elem_size, self.elem_size, self.elem_size
-                active = [x, y] == self.active_pos
+                active = (x, y) == self.active_pos
                 color = BoardPage.unit_color[self.board[x, y].type.name]
                 self._draw_unit(self.board[x, y], position, active, color)
 

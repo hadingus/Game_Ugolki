@@ -115,6 +115,9 @@ class Board:
     def force_swap(self, pos1, pos2):
         x1, y1 = pos1
         x2, y2 = pos2
+        unit1, unit2 = self.map[x1][y1], self.map[x2][y2]
+        self.position_of_unit[unit1] = pos2
+        self.position_of_unit[unit2] = pos1
         self.map[x1][y1], self.map[x2][y2] = self.map[x2][y2], self.map[x1][y1]
 
     def print_board(self):
