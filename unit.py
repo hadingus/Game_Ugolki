@@ -37,10 +37,10 @@ class Unit:
     def __hash__(self):
         return hash(id)
 
-    def can_move(self, position):
+    def move(self, position):
         if self._board is None:
             raise ValueError('Board is not set')
-        return self._mover.can_move(self, self._board, position)
+        return self._mover.move(self, self._board, position)
 
     def set_board(self, board):
         self._board = board
@@ -63,7 +63,13 @@ class Unit:
 class Mover(ABC):
     type = None
 
-    def can_move(self, unit: Unit, board, position):
+    def move(self, unit: Unit, board, position):
+        if not self._can_move_to(unit, board, position):
+            return False
+        start_position = board.position_of_unit[unit]
+        board.force_move(start_position, position)
+
+    def _can_move_to(self, unit, board, position):
         start_position = board.position_of_unit[unit]
         positions = self._possible_positions(unit, board)
         if position in positions:
@@ -71,11 +77,11 @@ class Mover(ABC):
         return False
 
     def _possible_positions(self, unit: Unit, board):
-        if not self._can_move(unit, board):
+        if not self._able_to_move(unit, board):
             return {}
         return self._positions_without_block(unit, board)
 
-    def _can_move(self, unit: Unit, board):
+    def _able_to_move(self, unit: Unit, board):
         police_block = 3
 
         x, y = board.position_of_unit[unit]
