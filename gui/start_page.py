@@ -45,13 +45,15 @@ class StartPage(Handler, Drawable):
 
     def draw(self):
         self.screen.fill(colors.LIGHT_GREEN)
-        self.playButton.draw()
-        self.authors.draw()
-        self.author_surok.draw()
-        self.author_hadingus.draw()
-        self.title.draw()
-        self.surok.draw()
-        self.zhekek.draw()
+
+        for element in (self.playButton,
+                        self.authors,
+                        self.author_surok,
+                        self.author_hadingus,
+                        self.title,
+                        self.surok,
+                        self.zhekek):
+            element.draw()
 
     def handle(self, event: pygame.event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
