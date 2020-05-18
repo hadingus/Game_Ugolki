@@ -63,7 +63,11 @@ class BoardPage(Handler, Drawable):
             pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
 
             if self.active_pos is None:
+<<<<<<< HEAD
                 if valid(pos_x, pos_y, self.board.size_map):
+=======
+                if valid(pos_x, pos_y, self.board.size_map) and self.board[pos_x, pos_y] is not None:
+>>>>>>> bc7d7fefd0c42d0878d2d78d5f5b64aa2e09363f
                     self.active_pos = (pos_x, pos_y)
             else:
                 if self.board.do_move(*self.active_pos, pos_x, pos_y) or self.active_pos == (pos_x, pos_y):
@@ -77,12 +81,15 @@ class BoardPage(Handler, Drawable):
             elif self.back_button.accepts(event.pos):
                 self.operator.state = start_page.StartPage(self.screen, self.operator)
 
+<<<<<<< HEAD
             # if self.move_pos is not None and self.active_pos is not None:
             #     from_x, from_y = self.active_pos
             #     to_x, to_y = self.move_pos
             #     if self.board.do_move(from_x, from_y, to_x, to_y):
             #         self.active_pos = None
             #         self.move_pos = None
+=======
+>>>>>>> bc7d7fefd0c42d0878d2d78d5f5b64aa2e09363f
 
     def draw_board(self):
         self.elem_size = BoardPage.board_len // self.board.size_map

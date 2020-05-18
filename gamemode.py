@@ -16,11 +16,11 @@ class GameMode:
         self.features = set()
         self.name = ""
 
-    def __init__(self, size, arrangement):
+    def set_size(self, size):
         self.size_map = size
+
+    def set_arrangement(self, arrangement):
         self.arrangement = arrangement
-        self.features = set()
-        self.name = ""
 
 
 class GameModeBuilder(ABC):
