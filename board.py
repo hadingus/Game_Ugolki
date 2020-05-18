@@ -100,9 +100,18 @@ class Board:
             return self.map[x][y]
         return None
 
+    def change_player(self):
+        self.current_player = self.player_A if self.current_player == self.player_B else self.player_B
+
     def do_move(self, from_x, from_y, to_x, to_y):
         current_unit = self.map[from_x][from_y]
-        return current_unit.move((to_x, to_y))
+        if current_unit is None or self.current_player is not current_unit.player:
+            return False
+        if current_unit.move((to_x, to_y)):
+            self.change_player()
+            return True
+        return False
+
 
     def force_move(self, from_pos, to_pos):
         fx, fy = from_pos

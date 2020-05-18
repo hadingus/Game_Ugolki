@@ -161,6 +161,17 @@ class WallModeBuilder(SquareBuilder):
         self.put_units(3, 3, _unit_list)
 
 
+class StupidModeBuilder(GameModeBuilder):
+    _mod_name = "Тупой режим"
+
+    def set_size(self):
+        self._result.size_map = 5
+
+    def set_arrangement(self):
+        self._result.arrangement.append((Unit(CheckersKingMover()), 0, 0))
+        self._result.arrangement.append((Unit(SwapMover()), 1, 0))
+
+
 class Director:
     def construct_game_mode(self, builder: GameModeBuilder):
         builder.reset()

@@ -6,7 +6,9 @@ from gui.gui_operator import GuiOperator
 from gui import board_page
 from gui import start_page
 from gamemode import FlexSquareBuilder, ClassicModeBuilder, AdvancedModeBuilder, AllUnitsModeBuilder, \
-    KingPoliceModeBuilder, WallModeBuilder, Director
+    KingPoliceModeBuilder, WallModeBuilder, StupidModeBuilder, Director, AiDecorator
+from AI.adapter import AiAdapter
+from AI.ai import AI
 
 
 class ModePage(Handler, Drawable):
@@ -19,11 +21,17 @@ class ModePage(Handler, Drawable):
                     FlexSquareBuilder(),
                     KingPoliceModeBuilder(),
                     WallModeBuilder(),
-                    AllUnitsModeBuilder()]
+                    AllUnitsModeBuilder(),
+                    StupidModeBuilder()]
 
         director = Director()
 
         modes = [director.construct_game_mode(builder) for builder in builders]
+
+        ai_mode = AiDecorator(director.construct_game_mode(FlexSquareBuilder()), AiAdapter(AI.init()))
+        ai_mode.name = "Диагональные уголки с ИИ"
+
+        modes.append(ai_mode)
 
         buttons = [CheckButton(screen, (100, 100 + 60 * i, 440, 45), modes[i].name) for i in range(len(modes))]
 

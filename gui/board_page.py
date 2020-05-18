@@ -10,6 +10,7 @@ from gamemode import GameMode
 from itertools import product
 from gui import mode_page
 from gui.unit_drawer import DefaultDrawer
+from gamemode import ModeFeature
 
 
 def get_pos(pos, base_len):
@@ -29,15 +30,28 @@ class BoardPage(Handler, Drawable):
     def __init__(self, screen: pygame.Surface, operator: GuiOperator, mode: GameMode):
         self.screen = screen
         self.operator = operator
+        self.mode = mode
         self.board = Board(mode)
         self.elem_size = 0
         self.active_pos = None
         self.move_pos = None
         self.change_button = Button(screen, (15, 615, 300, 50), "Change regime", colors.KHAKI, colors.DARK_BLUE)
         self.back_button = Button(screen, (420, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
+        self.result = None
 
     def upd_regime(self, mode: GameMode):
         self.board.reformat(mode)
+
+    def draw_result_text(self):
+        if self.result is None:
+            return
+        if self.result is self.board.player_A:
+            text = "Player A wins!"
+        elif self.result is self.board.player_B:
+            text = "Player B wins!"
+        else:
+            text = "Draw"
+        Text(self.screen, (200, 200), text, 30, colors.KHAKI).draw()
 
     def draw(self):
         self.screen.fill(colors.SAND)
@@ -45,6 +59,7 @@ class BoardPage(Handler, Drawable):
         self.back_button.draw()
         self.change_button.draw()
         self.draw_color_exp()
+        self.draw_result_text()
 
     def draw_color_exp(self):
         pos_y = 10
@@ -57,25 +72,43 @@ class BoardPage(Handler, Drawable):
             Text(self.screen, pos_text, BoardPage.unit_name[key], 20).draw()
             pos_y += 60
 
+    def _handle_moving(self, event: pygame.event):
+        if ModeFeature.AI in self.mode.features:
+            if self.board.current_player == self.board.player_B:
+                return
+            
+        mouse_click_position = event.pos
+        pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
+
+        if self.active_pos is None:
+            if valid(pos_x, pos_y, self.board.size_map) and self.board[pos_x, pos_y] is not None:
+                if self.board[pos_x, pos_y].player is self.board.current_player:
+                    self.active_pos = (pos_x, pos_y)
+        else:
+            if self.board.do_move(*self.active_pos, pos_x, pos_y) or self.active_pos == (pos_x, pos_y):
+                self.active_pos = None
+            elif valid(pos_x, pos_y, self.board.size_map):
+                if self.board[pos_x, pos_y] is not None and \
+                        self.board[pos_x, pos_y].player is self.board.current_player:
+                    self.active_pos = (pos_x, pos_y)
+
     def handle(self, event: pygame.event):
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_click_position = event.pos
-            pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
+            result = self.result
 
-            if self.active_pos is None:
-                if valid(pos_x, pos_y, self.board.size_map) and self.board[pos_x, pos_y] is not None:
-                    self.active_pos = (pos_x, pos_y)
-            else:
-                if self.board.do_move(*self.active_pos, pos_x, pos_y) or self.active_pos == (pos_x, pos_y):
-                    self.active_pos = None
-                elif valid(pos_x, pos_y, self.board.size_map):
-                    if self.board[pos_x, pos_y] is not None:
-                        self.active_pos = (pos_x, pos_y)
+            if result is None:
+                self._handle_moving(event)
 
             if self.change_button.accepts(event.pos):
                 self.operator.state = mode_page.ModePage(self.screen, self.operator)
             elif self.back_button.accepts(event.pos):
                 self.operator.state = start_page.StartPage(self.screen, self.operator)
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and ModeFeature.AI in self.mode.features:
+                if self.board.current_player == self.board.player_B:
+                    step = self.mode.ai.get_step(self.board)
+                    self.board.do_move(*step)
+        self.result = self.board.is_game_finished()
 
     def draw_board(self):
         self.elem_size = BoardPage.board_len // self.board.size_map
