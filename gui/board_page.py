@@ -34,7 +34,7 @@ class BoardPage(Handler, Drawable):
         self.active_pos = None
         self.move_pos = None
         self.change_button = Button(screen, (15, 615, 300, 50), "Change regime", colors.KHAKI, colors.DARK_BLUE)
-        self.back_button = Button(screen, (420, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
+        self.back_button = Button(screen, (470, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
 
     def upd_regime(self, mode: GameMode):
         self.board.reformat(mode)
