@@ -35,13 +35,13 @@ class StartPage(Handler, Drawable):
     def __init__(self, screen: pygame.Surface, operator: GuiOperator):
         self.screen = screen
         self.operator = operator
-        self.playButton = Button(screen, (180, 70, 500, 250), "PLAY", colors.LIGHT_GREEN, colors.RED)
-        self.authors = Text(screen, (340, 300), "Authors:", 40, colors.BEIGE)
-        self.author_surok = Text(screen, (160, 650), "surokpro", 20, colors.BEIGE)
-        self.author_hadingus = Text(screen, (570, 650), "hadingus", 20, colors.BEIGE)
-        self.title = Text(screen, (220, 20), "SUPER GAME", 50, colors.BLUE)
-        self.surok = Photo(self.screen, "sprites/surok.jpg", (200, 500), "https://github.com/surkovv/")
-        self.zhekek = Photo(self.screen, "sprites/zhekek.jpg", (600, 500), "https://github.com/hadingus/")
+        self.playButton = Button(screen, (190, 70, 500, 250), "PLAY", colors.LIGHT_GREEN, colors.RED)
+        self.authors = Text(screen, (350, 300), "Authors:", 40, colors.BEIGE)
+        self.author_surok = Text(screen, (170, 650), "surokpro", 20, colors.BEIGE)
+        self.author_hadingus = Text(screen, (580, 650), "hadingus", 20, colors.BEIGE)
+        self.title = Text(screen, (270, 20), "SUPER GAME", 50, colors.BLUE)
+        self.surok = Photo(self.screen, "sprites/surok.jpg", (210, 500), "https://github.com/surkovv/")
+        self.zhekek = Photo(self.screen, "sprites/zhekek.jpg", (610, 500), "https://github.com/hadingus/")
 
     def draw(self):
         self.screen.fill(colors.LIGHT_GREEN)

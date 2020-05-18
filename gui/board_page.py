@@ -76,7 +76,7 @@ class BoardPage(Handler, Drawable):
         if ModeFeature.AI in self.mode.features:
             if self.board.current_player == self.board.player_B:
                 return
-            
+
         mouse_click_position = event.pos
         pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
 

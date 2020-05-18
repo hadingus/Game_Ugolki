@@ -285,6 +285,7 @@ class SwapMover(Mover):
         if position in self._possible_positions(unit, board):
             board.force_swap(start_position, position)
             return True
+        return False
 
 
     def _positions_without_block(self, unit: Unit, board):

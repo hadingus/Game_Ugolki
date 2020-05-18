@@ -15,7 +15,7 @@ class ModePage(Handler, Drawable):
     def __init__(self, screen: pygame.Surface, operator: GuiOperator):
         self.screen = screen
         self.operator = operator
-        self.title = Text(screen, (100, 20), "Выбор режима", 50)
+        self.title = Text(screen, (250, 20), "Выбор режима", 50)
         builders = [ClassicModeBuilder(),
                     AdvancedModeBuilder(),
                     FlexSquareBuilder(),
@@ -37,8 +37,8 @@ class ModePage(Handler, Drawable):
 
         self.mod_pairs = list(zip(buttons, modes))
 
-        self.back_button = Button(screen, (440, 550, 100, 60), 'Назад')
-        self.go_button = Button(screen, (100, 550, 180, 60), 'Играть!', colors.RED, colors.WHITE)
+        self.back_button = Button(screen, (500, 560, 100, 60), 'Назад')
+        self.go_button = Button(screen, (100, 560, 180, 60), 'Играть!', colors.RED, colors.WHITE)
 
         self.chosen_mode = None
         self.checked_button = None

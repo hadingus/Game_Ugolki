@@ -3,10 +3,7 @@ from enum import Enum
 from board import Board, valid
 from gamemode import ClassicModeBuilder, Director, GameMode
 from unit import *
-<<<<<<< HEAD
-=======
 
->>>>>>> bc7d7fefd0c42d0878d2d78d5f5b64aa2e09363f
 
 class CustomType(Enum):
     SUPER = 0
@@ -25,41 +22,33 @@ def test_changing_type():
 
 
 def test_pawn():
-    director = Director()
-    mode = director.construct_game_mode(ClassicModeBuilder())
+    mode = GameMode()
+    mode.set_size(8)
+    arrangement = [(Unit(PawnMover()), 2, 2)]
+    mode.set_arrangement(arrangement)
     board = Board(mode)
 
-    for i in range(2, -1, -1):
-        for j in range(3):
-            board.do_move(i, j, i + 5, j)
-            board.do_move(7 - i, 7 - j, 2 - i, 7 - j)
+    x = 2
+    y = 2
 
-    for i in range(3):
-        for j in range(3):
-            assert board[i + 5, j] is not None
-            assert board[i, j + 5] is not None
-            assert board[i, j] is None
-            assert board[i + 5, j + 5] is None
-
-    board = Board(mode)
-    for i in range(1, 8):
-        for j in range(8):
-            board[i, j] = None
-
-    for i in range(1, 8):
-        for j in range(8):
-            if i != 0 and j != 2:
-                assert board.do_move(0, 2, i, j) is False
+    for dx in range(-10, 10):
+        for dy in range(-10, 10):
+            if dx == 0 and dy == 0:
+                continue
+            to_x = x + dx
+            to_y = y + dy
+            if valid(to_x, to_y, 8):
+                if abs(dx) <= 1 and abs(dy) <= 1 and dx * dy == 0:
+                    assert board.do_move(x, y, to_x, to_y) is True
+                    assert board.do_move(to_x, to_y, x, y) is True
+                else:
+                    assert board.do_move(x, y, to_x, to_y) is False
 
 
 def test_king():
-<<<<<<< HEAD
-    mode = GameMode(8, [(Unit(KingMover()), 2, 2), (Unit(KingMover()), 1, 1)])
-=======
     mode = GameMode()
     mode.set_size(8)
     mode.set_arrangement([(Unit(KingMover()), 2, 2), (Unit(KingMover()), 1, 1)])
->>>>>>> bc7d7fefd0c42d0878d2d78d5f5b64aa2e09363f
     board = Board(mode)
     x = 2
     y = 2
@@ -82,13 +71,9 @@ def test_king():
 
 
 def test_rook():
-<<<<<<< HEAD
-    mode = GameMode(8, [(Unit(RookMover), 2, 2), (Unit(RookMover()), 2, 3)])
-=======
     mode = GameMode()
     mode.set_size(8)
     mode.set_arrangement([(Unit(RookMover()), 2, 2), (Unit(RookMover()), 2, 3)])
->>>>>>> bc7d7fefd0c42d0878d2d78d5f5b64aa2e09363f
     board = Board(mode)
     x = 2
     y = 2
@@ -109,9 +94,6 @@ def test_rook():
                     assert board.do_move(x, y, to_x, to_y) is False
 
 
-<<<<<<< HEAD
-
-=======
 def test_bishop():
     mode = GameMode()
     mode.set_size(8)
@@ -199,4 +181,84 @@ def test_police():
                     assert board.do_move(to_x, to_y, x, y) is True
                 else:
                     assert board.do_move(x, y, to_x, to_y) is False
->>>>>>> bc7d7fefd0c42d0878d2d78d5f5b64aa2e09363f
+
+
+def test_usual():
+    mode = GameMode()
+    mode.set_size(8)
+    mode.set_arrangement([(Unit(UsualMover()), 2, 2)])
+    x = 2
+    y = 2
+    board = Board(mode)
+    for dx in range(-10, 10):
+        for dy in range(-10, 10):
+            if dx == 0 and dy == 0:
+                continue
+            to_x = x + dx
+            to_y = y + dy
+            if valid(to_x, to_y, 8):
+                if abs(dx) <= 1 and abs(dy) <= 1 and dx * dy == 0:
+                    assert board.do_move(x, y, to_x, to_y) is True
+                    assert board.do_move(to_x, to_y, x, y) is True
+                else:
+                    assert board.do_move(x, y, to_x, to_y) is False
+
+    arrangement = [(Unit(UsualMover()), 4, 4)]
+    x = 4
+    y = 4
+    for dx in range(-1, 2):
+        for dy in range(-1, 2):
+            if (dx == 0 and dy == 0) or dx * dy != 0:
+                continue
+            arrangement.append((Unit(PawnMover()), x + dx, y + dy))
+
+    mode.set_size(20)
+    mode.set_arrangement(arrangement)
+
+    board = Board(mode)
+
+    for dx in range(-2, 3, 2):
+        for dy in range(-2, 3, 2):
+            if (dx == 0 and dy == 0) or dx * dy != 0:
+                continue
+            to_x = x + dx
+            to_y = y + dy
+            assert board.do_move(x, y, to_x, to_y) is True
+            assert board.do_move(to_x, to_y, x, y) is True
+
+
+def test_swapper():
+    mode = GameMode()
+    arrangement = [(Unit(SwapMover()), 2, 2)]
+    mode.set_arrangement(arrangement)
+    mode.set_size(8)
+    board = Board(mode)
+
+    board[5, 5] = None
+    x = 2
+    y = 2
+    for dx in range(-10, 10):
+        for dy in range(-10, 10):
+            if dx == 0 and dy == 0:
+                continue
+            to_x = x + dx
+            to_y = y + dy
+            if valid(to_x, to_y, 8):
+                assert board.do_move(x, y, to_x, to_y) is False
+
+    x = 1
+    y = 1
+    arrangement.clear()
+    arrangement.append((Unit(SwapMover()), 1, 1))
+    for dx in range(-1, 2):
+        for dy in range(-1, 2):
+            if dx == 0 and dy == 0:
+                continue
+            arrangement.append((Unit(KingMover()), x + dx, y + dy))
+
+    mode.set_arrangement(arrangement)
+    board = Board(mode)
+
+    for i, j in product(range(5, 8), range(5, 8)):
+        assert board.do_move(x, y, i, j) is True
+        assert board.do_move(i, j, x, y) is True
