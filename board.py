@@ -112,6 +112,9 @@ class Board:
             return True
         return False
 
+    def do_pofig_move(self, from_x, from_y, to_x, to_y):
+        current_unit = self.map[from_x][from_y]
+        return current_unit.move((to_x, to_y))
 
     def force_move(self, from_pos, to_pos):
         fx, fy = from_pos

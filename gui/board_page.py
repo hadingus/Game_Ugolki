@@ -36,7 +36,7 @@ class BoardPage(Handler, Drawable):
         self.active_pos = None
         self.move_pos = None
         self.change_button = Button(screen, (15, 615, 300, 50), "Change regime", colors.KHAKI, colors.DARK_BLUE)
-        self.back_button = Button(screen, (420, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
+        self.back_button = Button(screen, (480, 615, 350, 50), "Back to main menu", colors.KHAKI, colors.DARK_BLUE)
         self.result = None
 
     def upd_regime(self, mode: GameMode):
@@ -47,11 +47,16 @@ class BoardPage(Handler, Drawable):
             return
         if self.result is self.board.player_A:
             text = "Player A wins!"
+            color = colors.RED
         elif self.result is self.board.player_B:
             text = "Player B wins!"
+            color = colors.GREEN
         else:
             text = "Draw"
-        Text(self.screen, (200, 200), text, 30, colors.KHAKI).draw()
+            color = colors.AQUAMARINE
+        position = 130, 150, 355, 150
+        pygame.draw.rect(self.screen, color, position)
+        Text(self.screen, (150, 180), text, 50, colors.PURPLE).draw()
 
     def draw(self):
         self.screen.fill(colors.SAND)
@@ -76,7 +81,7 @@ class BoardPage(Handler, Drawable):
         if ModeFeature.AI in self.mode.features:
             if self.board.current_player == self.board.player_B:
                 return
-            
+
         mouse_click_position = event.pos
         pos_x, pos_y = [get_pos(pos, self.elem_size) for pos in mouse_click_position]
 
