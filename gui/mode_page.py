@@ -37,8 +37,8 @@ class ModePage(Handler, Drawable):
 
         self.mod_pairs = list(zip(buttons, modes))
 
-        self.back_button = Button(screen, (500, 560, 100, 60), 'Назад')
-        self.go_button = Button(screen, (100, 560, 180, 60), 'Играть!', colors.RED, colors.WHITE)
+        self.back_button = Button(screen, (590, 590, 100, 60), 'Назад')
+        self.go_button = Button(screen, (100, 590, 180, 60), 'Играть!', colors.RED, colors.WHITE)
 
         self.chosen_mode = None
         self.checked_button = None

@@ -1,7 +1,5 @@
-from unit import Type, Unit, FlexMover, KingMover
-from enum import Enum
 from board import Board, valid
-from gamemode import ClassicModeBuilder, Director, GameMode
+from gamemode import GameMode
 from unit import *
 
 
@@ -39,10 +37,10 @@ def test_pawn():
             to_y = y + dy
             if valid(to_x, to_y, 8):
                 if abs(dx) <= 1 and abs(dy) <= 1 and dx * dy == 0:
-                    assert board.do_move(x, y, to_x, to_y) is True
-                    assert board.do_move(to_x, to_y, x, y) is True
+                    assert board.do_pofig_move(x, y, to_x, to_y) is True
+                    assert board.do_pofig_move(to_x, to_y, x, y) is True
                 else:
-                    assert board.do_move(x, y, to_x, to_y) is False
+                    assert board.do_pofig_move(x, y, to_x, to_y) is False
 
 
 def test_king():
@@ -53,7 +51,7 @@ def test_king():
     x = 2
     y = 2
 
-    assert board.do_move(2, 2, 1, 1) is False
+    assert board.do_pofig_move(2, 2, 1, 1) is False
     board[1, 1] = None
 
     for dx in range(-10, 10):
@@ -64,10 +62,10 @@ def test_king():
             to_y = y + dy
             if valid(to_x, to_y, 8):
                 if abs(dx) <= 1 and abs(dy) <= 1:
-                    assert board.do_move(x, y, to_x, to_y) is True
-                    assert board.do_move(to_x, to_y, x, y) is True
+                    assert board.do_pofig_move(x, y, to_x, to_y) is True
+                    assert board.do_pofig_move(to_x, to_y, x, y) is True
                 else:
-                    assert board.do_move(x, y, to_x, to_y) is False
+                    assert board.do_pofig_move(x, y, to_x, to_y) is False
 
 
 def test_rook():
@@ -77,7 +75,7 @@ def test_rook():
     board = Board(mode)
     x = 2
     y = 2
-    assert board.do_move(2, 2, 2, 6) is False
+    assert board.do_pofig_move(2, 2, 2, 6) is False
     board[2, 3] = None
 
     for dx in range(-10, 10):
@@ -88,10 +86,10 @@ def test_rook():
             to_y = y + dy
             if valid(to_x, to_y, 8):
                 if dx == 0 or dy == 0:
-                    assert board.do_move(x, y, to_x, to_y) is True
-                    assert board.do_move(to_x, to_y, x, y) is True
+                    assert board.do_pofig_move(x, y, to_x, to_y) is True
+                    assert board.do_pofig_move(to_x, to_y, x, y) is True
                 else:
-                    assert board.do_move(x, y, to_x, to_y) is False
+                    assert board.do_pofig_move(x, y, to_x, to_y) is False
 
 
 def test_bishop():
@@ -101,7 +99,7 @@ def test_bishop():
     board = Board(mode)
     x = 2
     y = 2
-    assert board.do_move(2, 2, 4, 4) is False
+    assert board.do_pofig_move(2, 2, 4, 4) is False
     for i in range(8):
         for j in range(8):
             if i != x and j != y:
@@ -115,10 +113,10 @@ def test_bishop():
             to_y = y + dy
             if valid(to_x, to_y, 8):
                 if abs(dx) == abs(dy):
-                    assert board.do_move(x, y, to_x, to_y) is True
-                    assert board.do_move(to_x, to_y, x, y) is True
+                    assert board.do_pofig_move(x, y, to_x, to_y) is True
+                    assert board.do_pofig_move(to_x, to_y, x, y) is True
                 else:
-                    assert board.do_move(x, y, to_x, to_y) is False
+                    assert board.do_pofig_move(x, y, to_x, to_y) is False
 
 
 def test_police():
@@ -146,8 +144,8 @@ def test_police():
             for d2x in range(-1, 2):
                 for d2y in range(-1, 2):
                     if board[p_x + dx, p_y + dy] is None:
-                        assert board.do_move(p_x, p_y, p_x + dx, p_y + dy) is True
-                        assert board.do_move(p_x + dx, p_y + dy, p_x, p_y) is True
+                        assert board.do_pofig_move(p_x, p_y, p_x + dx, p_y + dy) is True
+                        assert board.do_pofig_move(p_x + dx, p_y + dy, p_x, p_y) is True
 
     for i in range(15):
         for j in range(15):
@@ -162,7 +160,7 @@ def test_police():
             p_y = y + dy
             for d2x in range(-1, 2):
                 for d2y in range(-1, 2):
-                    assert board.do_move(p_x, p_y, p_x + dx, p_y + dy) is False
+                    assert board.do_pofig_move(p_x, p_y, p_x + dx, p_y + dy) is False
 
     x = 2
     y = 2
@@ -177,10 +175,10 @@ def test_police():
             to_y = y + dy
             if valid(to_x, to_y, 6):
                 if abs(dx) <= 1 and abs(dy) <= 1:
-                    assert board.do_move(x, y, to_x, to_y) is True
-                    assert board.do_move(to_x, to_y, x, y) is True
+                    assert board.do_pofig_move(x, y, to_x, to_y) is True
+                    assert board.do_pofig_move(to_x, to_y, x, y) is True
                 else:
-                    assert board.do_move(x, y, to_x, to_y) is False
+                    assert board.do_pofig_move(x, y, to_x, to_y) is False
 
 
 def test_usual():
@@ -198,10 +196,10 @@ def test_usual():
             to_y = y + dy
             if valid(to_x, to_y, 8):
                 if abs(dx) <= 1 and abs(dy) <= 1 and dx * dy == 0:
-                    assert board.do_move(x, y, to_x, to_y) is True
-                    assert board.do_move(to_x, to_y, x, y) is True
+                    assert board.do_pofig_move(x, y, to_x, to_y) is True
+                    assert board.do_pofig_move(to_x, to_y, x, y) is True
                 else:
-                    assert board.do_move(x, y, to_x, to_y) is False
+                    assert board.do_pofig_move(x, y, to_x, to_y) is False
 
     arrangement = [(Unit(UsualMover()), 4, 4)]
     x = 4
@@ -223,8 +221,8 @@ def test_usual():
                 continue
             to_x = x + dx
             to_y = y + dy
-            assert board.do_move(x, y, to_x, to_y) is True
-            assert board.do_move(to_x, to_y, x, y) is True
+            assert board.do_pofig_move(x, y, to_x, to_y) is True
+            assert board.do_pofig_move(to_x, to_y, x, y) is True
 
 
 def test_swapper():
@@ -244,7 +242,7 @@ def test_swapper():
             to_x = x + dx
             to_y = y + dy
             if valid(to_x, to_y, 8):
-                assert board.do_move(x, y, to_x, to_y) is False
+                assert board.do_pofig_move(x, y, to_x, to_y) is False
 
     x = 1
     y = 1
@@ -260,5 +258,5 @@ def test_swapper():
     board = Board(mode)
 
     for i, j in product(range(5, 8), range(5, 8)):
-        assert board.do_move(x, y, i, j) is True
-        assert board.do_move(i, j, x, y) is True
+        assert board.do_pofig_move(x, y, i, j) is True
+        assert board.do_pofig_move(i, j, x, y) is True

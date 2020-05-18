@@ -36,12 +36,12 @@ class StartPage(Handler, Drawable):
         self.screen = screen
         self.operator = operator
         self.playButton = Button(screen, (190, 70, 500, 250), "PLAY", colors.LIGHT_GREEN, colors.RED)
-        self.authors = Text(screen, (350, 300), "Authors:", 40, colors.BEIGE)
-        self.author_surok = Text(screen, (170, 650), "surokpro", 20, colors.BEIGE)
-        self.author_hadingus = Text(screen, (580, 650), "hadingus", 20, colors.BEIGE)
+        self.authors = Text(screen, (360, 300), "Authors:", 40, colors.BEIGE)
+        self.author_surok = Text(screen, (190, 650), "surokpro", 20, colors.BEIGE)
+        self.author_hadingus = Text(screen, (600, 650), "hadingus", 20, colors.BEIGE)
         self.title = Text(screen, (270, 20), "SUPER GAME", 50, colors.BLUE)
-        self.surok = Photo(self.screen, "sprites/surok.jpg", (210, 500), "https://github.com/surkovv/")
-        self.zhekek = Photo(self.screen, "sprites/zhekek.jpg", (610, 500), "https://github.com/hadingus/")
+        self.surok = Photo(self.screen, "sprites/surok.jpg", (230, 500), "https://github.com/surkovv/")
+        self.zhekek = Photo(self.screen, "sprites/zhekek.jpg", (630, 500), "https://github.com/hadingus/")
 
     def draw(self):
         self.screen.fill(colors.LIGHT_GREEN)
