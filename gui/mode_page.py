@@ -21,8 +21,7 @@ class ModePage(Handler, Drawable):
                     FlexSquareBuilder(),
                     KingPoliceModeBuilder(),
                     WallModeBuilder(),
-                    AllUnitsModeBuilder(),
-                    StupidModeBuilder()]
+                    AllUnitsModeBuilder()]
 
         director = Director()
 
